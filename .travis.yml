@@ -1,0 +1,19 @@
+language: go
+
+go:
+  - 1.8
+  - 1.9
+  - 1.10
+  - 1.11
+  - 1.12
+  - tip
+
+git:
+  depth: 1
+
+before_script:
+  - go install github.com/golangci/golangci-lint/cmd/golangci-lint
+
+script:
+  - golangci-lint run
+  - go test -v -race ./...
