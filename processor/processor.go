@@ -86,7 +86,9 @@ func (c *Context) HandleFailure(query QueryHandleFailure) error {
 // AddHandler a add handler for external task
 func (p *Processor) AddHandler(topics *[]camunda_client_go.QueryFetchAndLockTopic, handler Handler) {
 	if topics != nil && p.options.LockDuration != 0 {
-		for _, v := range *topics {
+		for i := range *topics {
+			v := &(*topics)[i]
+
 			if v.LockDuration <= 0 {
 				v.LockDuration = int(p.options.LockDuration / time.Millisecond)
 			}
