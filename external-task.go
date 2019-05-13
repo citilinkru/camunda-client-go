@@ -449,7 +449,7 @@ func (e *ExternalTask) FetchAndLock(query QueryFetchAndLock) ([]*ResLockedExtern
 		&query,
 	)
 	if err != nil {
-		return nil, fmt.Errorf("requsest error: %s", err)
+		return nil, fmt.Errorf("request error: %s", err)
 	}
 
 	if err := e.client.readJsonResponse(res, &resp); err != nil {
