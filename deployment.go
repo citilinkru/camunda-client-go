@@ -60,10 +60,10 @@ type ResDeploymentCreate struct {
 // ReqDeploymentCreate a request to deployment create
 type ReqDeploymentCreate struct {
 	DeploymentName           string
-	EnableDuplicateFiltering bool
-	DeployChangedOnly        bool
-	DeploymentSource         string
-	TenantId                 string
+	EnableDuplicateFiltering *bool
+	DeployChangedOnly        *bool
+	DeploymentSource         *string
+	TenantId                 *string
 	Resources                map[string]interface{}
 }
 
@@ -137,20 +137,28 @@ func (d *Deployment) Create(deploymentCreate ReqDeploymentCreate) (deployment *R
 		return nil, err
 	}
 
-	if err = w.WriteField("enable-duplicate-filtering", strconv.FormatBool(deploymentCreate.EnableDuplicateFiltering)); err != nil {
-		return nil, err
+	if deploymentCreate.EnableDuplicateFiltering != nil {
+		if err = w.WriteField("enable-duplicate-filtering", strconv.FormatBool(*deploymentCreate.EnableDuplicateFiltering)); err != nil {
+			return nil, err
+		}
 	}
 
-	if err = w.WriteField("deploy-changed-only", strconv.FormatBool(deploymentCreate.DeployChangedOnly)); err != nil {
-		return nil, err
+	if deploymentCreate.DeployChangedOnly != nil {
+		if err = w.WriteField("deploy-changed-only", strconv.FormatBool(*deploymentCreate.DeployChangedOnly)); err != nil {
+			return nil, err
+		}
 	}
 
-	if err = w.WriteField("deployment-source", deploymentCreate.DeploymentSource); err != nil {
-		return nil, err
+	if deploymentCreate.DeploymentSource != nil {
+		if err = w.WriteField("deployment-source", *deploymentCreate.DeploymentSource); err != nil {
+			return nil, err
+		}
 	}
 
-	if err = w.WriteField("tenant-id", deploymentCreate.TenantId); err != nil {
-		return nil, err
+	if deploymentCreate.TenantId != nil {
+		if err = w.WriteField("tenant-id", *deploymentCreate.TenantId); err != nil {
+			return nil, err
+		}
 	}
 
 	for key, resource := range deploymentCreate.Resources {

@@ -1,12 +1,11 @@
 package processor
 
 import (
+	"errors"
 	"fmt"
 	"github.com/citilinkru/camunda-client-go"
-	log "github.com/sirupsen/logrus"
 	"math/rand"
 	"runtime/debug"
-	"sync"
 	"time"
 )
 
@@ -14,7 +13,7 @@ import (
 type Processor struct {
 	client  *camunda_client_go.Client
 	options *ProcessorOptions
-	logger  *log.Logger
+	logger  func(err error)
 }
 
 // ProcessorOptions options for Processor
@@ -23,8 +22,10 @@ type ProcessorOptions struct {
 	WorkerId string
 	// lock duration for all external task
 	LockDuration time.Duration
-	// maximum tasks to receive for 1 request
+	// maximum tasks to receive for 1 request to camunda
 	MaxTasks int
+	// maximum running parallel task per handler
+	MaxParallelTaskPerHandler int
 	// use priority
 	UsePriority *bool
 	// long polling timeout
@@ -32,7 +33,7 @@ type ProcessorOptions struct {
 }
 
 // NewProcessor a create new instance Processor
-func NewProcessor(client *camunda_client_go.Client, options *ProcessorOptions, logger *log.Logger) *Processor {
+func NewProcessor(client *camunda_client_go.Client, options *ProcessorOptions, logger func(err error)) *Processor {
 	if options.WorkerId == "" {
 		options.WorkerId = fmt.Sprintf("worker-%d", rand.Int())
 	}
@@ -104,60 +105,64 @@ func (p *Processor) AddHandler(topics *[]camunda_client_go.QueryFetchAndLockTopi
 }
 
 func (p *Processor) startPuller(query camunda_client_go.QueryFetchAndLock, handler Handler) {
+	var tasksChan = make(chan *camunda_client_go.ResLockedExternalTask)
+
+	// create worker pool
+	for i := 0; i < p.options.MaxParallelTaskPerHandler; i++ {
+		go p.runWorker(handler, tasksChan)
+	}
+
 	for {
-		var wg sync.WaitGroup
 		tasks, err := p.client.ExternalTask.FetchAndLock(query)
 		if err != nil {
-			p.logger.Errorf("failed pull: %s", err)
+			p.logger(fmt.Errorf("failed pull: %s", err))
 			continue
 		}
 
 		for _, task := range tasks {
-			wg.Add(1)
-			go p.handle(&Context{
-				Task:   task,
-				client: p.client,
-			},
-				handler,
-				&wg,
-			)
+			tasksChan <- task
 		}
-
-		wg.Wait()
 	}
 }
 
-func (p *Processor) handle(ctx *Context, handler Handler, wg *sync.WaitGroup) {
+func (p *Processor) runWorker(handler Handler, tasksChan chan *camunda_client_go.ResLockedExternalTask) {
+	for task := range tasksChan {
+		p.handle(&Context{
+			Task:   task,
+			client: p.client,
+		}, handler)
+	}
+}
+
+func (p *Processor) handle(ctx *Context, handler Handler) {
 	defer func() {
 		if r := recover(); r != nil {
-			errMessage := fmt.Sprintf("Fatal error in task: %s", r)
-			errDetails := fmt.Sprintf("Fatal error in task: %s\nStack trace: %s", r, string(debug.Stack()))
+			errMessage := fmt.Sprintf("fatal error in task: %s", r)
+			errDetails := fmt.Sprintf("fatal error in task: %s\nStack trace: %s", r, string(debug.Stack()))
 			err := ctx.HandleFailure(QueryHandleFailure{
 				ErrorMessage: &errMessage,
 				ErrorDetails: &errDetails,
 			})
 
 			if err != nil {
-				p.logger.Errorf("Error send handle failure: %s", err)
+				p.logger(fmt.Errorf("error send handle failure: %s", err))
 			}
 
-			p.logger.Error(errDetails)
+			p.logger(errors.New(errDetails))
 		}
-
-		wg.Done()
 	}()
 
 	err := handler(ctx)
 	if err != nil {
-		errMessage := fmt.Sprintf("Task error: %s", err)
+		errMessage := fmt.Sprintf("task error: %s", err)
 		err = ctx.HandleFailure(QueryHandleFailure{
 			ErrorMessage: &errMessage,
 		})
 
 		if err != nil {
-			p.logger.Errorf("Error send handle failure: %s", err)
+			p.logger(fmt.Errorf("error send handle failure: %s", err))
 		}
 
-		p.logger.Warn(errMessage)
+		p.logger(errors.New(errMessage))
 	}
 }

@@ -80,7 +80,7 @@ type ResActivityInstanceStatisticsIncident struct {
 // or an empty request body)
 type ReqStartInstance struct {
 	// A JSON object containing the variables the process is to be initialized with
-	Variables *[]Variable `json:"variables,omitempty"`
+	Variables *map[string]Variable `json:"variables,omitempty"`
 	// The business key the process instance is to be initialized with.
 	// The business key uniquely identifies the process instance in the context of the given process definition
 	BusinessKey *string `json:"businessKey,omitempty"`
