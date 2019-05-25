@@ -3,18 +3,24 @@
 
 Installation
 -----------
-	go get github.com/citilinkru/camunda-client-go
+latest stable version:
 
+	go get gopkg.in/citilinkru/camunda-client-go.v1
+
+latest unstable version (master branch):
+
+	go get github.com/citilinkru/camunda-client-go
+	
 Usage
 -----------
 
 Create client:
 ```go
-timeout := time.Second * 10
 client := camunda_client_go.NewClient(camunda_client_go.ClientOptions{
+	EndpointUrl: "http://localhost:8080/engine-rest",
     ApiUser: "demo",
     ApiPassword: "demo",
-    Timeout: &timeout,
+    Timeout: time.Second * 10,
 })
 ```
 
@@ -22,50 +28,56 @@ Create deployment:
 ```go
 file, err := os.Open("demo.bpmn")
 if err != nil {
-    logger.Errorf("Error read file: %s", err)
+    fmt.Printf("Error read file: %s\n", err)
     return
 }
-result, err = client.Deployment.Create(camunda_client_go.ReqDeploymentCreate{
+result, err := client.Deployment.Create(camunda_client_go.ReqDeploymentCreate{
     DeploymentName: "DemoProcess",
     Resources: map[string]interface{}{
         "demo.bpmn": file,
     },
 })
 if err != nil {
-    logger.Errorf("Error deploy process: %s", err)
+    fmt.Printf("Error deploy process: %s\n", err)
     return
 }
 
-logger.infof("Result: %#+v", result)
+fmt.Printf("Result: %#+v\n", result)
 ```
 
 Start instance:
 ```go
-processKey := "DemoProcess"
-result, err = client.ProcessDefinition.StartInstance(
+processKey := "demo-process"
+result, err := client.ProcessDefinition.StartInstance(
 	camunda_client_go.QueryProcessDefinitionBy{Key: &processKey},
 	camunda_client_go.ReqStartInstance{},
 )
 if err != nil {
-    logger.Errorf("Error start process: %s", err)
+    fmt.Printf("Error start process: %s\n", err)
     return
 }
 
-logger.infof("Result: %#+v", result)
+fmt.Printf("Result: %#+v\n", result)
 ```
 
+More examples
+-----------
+[Examples documentation](examples/README.md)
 
 Usage for External task
 -----------
 
 Create external task processor:
 ```go
-logger := logrus.New()
+logger := func(err error) {
+	fmt.Println(err.Error())
+}
 asyncResponseTimeout := 5000
 proc := processor.NewProcessor(client, &processor.ProcessorOptions{
     WorkerId: "demo-worker",
     LockDuration: time.Second * 5,
-    MaxTasks: 1,
+    MaxTasks: 10,
+    MaxParallelTaskPerHandler: 100,
     AsyncResponseTimeout: &asyncResponseTimeout,
 }, logger)
 ```
@@ -77,7 +89,7 @@ proc.AddHandler(
         {TopicName: "HelloWorldSetter"},
     },
     func(ctx *processor.Context) error {
-        logger.Infof("Running task %s. WorkerId: %s. TopicName: %s", ctx.Task.Id, ctx.Task.WorkerId, ctx.Task.TopicName)
+        fmt.Printf("Running task %s. WorkerId: %s. TopicName: %s\n", ctx.Task.Id, ctx.Task.WorkerId, ctx.Task.TopicName)
 
         err := ctx.Complete(processor.QueryComplete{
             Variables: &map[string]camunda_client_go.Variable {
@@ -85,7 +97,7 @@ proc.AddHandler(
             },
         })
         if err != nil {
-            logger.Errorf("Error set complete task %s: %s", ctx.Task.Id, err)
+            fmt.Printf("Error set complete task %s: %s\n", ctx.Task.Id, err)
             
             return ctx.HandleFailure(processor.QueryHandleFailure{
                 ErrorMessage: &errTxt,
@@ -94,15 +106,11 @@ proc.AddHandler(
             })
         }
         
-        logger.Infof("Task %s completed", ctx.Task.Id)
+        fmt.Printf("Task %s completed\n", ctx.Task.Id)
         return nil
     },
 )
 ```
-
-WARNING
------------
-**This project is still under development. Use code with caution!**
 
 Features
 -----------
