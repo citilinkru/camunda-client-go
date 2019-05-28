@@ -4,7 +4,6 @@ import (
 	"bytes"
 	"encoding/json"
 	"fmt"
-	"github.com/pkg/errors"
 	"io"
 	"io/ioutil"
 	"net/http"
@@ -21,9 +20,9 @@ const DefaultDateTimeFormat = "2006-01-02T15:04:05.000-0700"
 
 // ClientOptions a client options
 type ClientOptions struct {
-	UserAgent   *string
-	EndpointUrl *string
-	Timeout     *time.Duration
+	UserAgent   string
+	EndpointUrl string
+	Timeout     time.Duration
 	ApiUser     string
 	ApiPassword string
 }
@@ -81,16 +80,16 @@ func NewClient(options ClientOptions) *Client {
 		apiPassword: options.ApiPassword,
 	}
 
-	if options.EndpointUrl != nil {
-		client.endpointUrl = *options.EndpointUrl
+	if options.EndpointUrl != "" {
+		client.endpointUrl = options.EndpointUrl
 	}
 
-	if options.UserAgent != nil {
-		client.userAgent = *options.UserAgent
+	if options.UserAgent != "" {
+		client.userAgent = options.UserAgent
 	}
 
-	if options.Timeout != nil {
-		client.httpClient.Timeout = *options.Timeout
+	if options.Timeout.Nanoseconds() != 0 {
+		client.httpClient.Timeout = options.Timeout
 	}
 
 	client.ExternalTask = &ExternalTask{client: client}
@@ -182,10 +181,6 @@ func (c *Client) doGet(path string, query map[string]string) (res *http.Response
 func (c *Client) checkResponse(res *http.Response) error {
 	if res.StatusCode >= 200 && res.StatusCode <= 299 {
 		return nil
-	}
-
-	if res.StatusCode == 404 {
-		return errors.New("Not found")
 	}
 
 	defer res.Body.Close()
