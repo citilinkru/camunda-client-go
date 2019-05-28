@@ -33,16 +33,28 @@ type ProcessorOptions struct {
 }
 
 // NewProcessor a create new instance Processor
-func NewProcessor(client *camunda_client_go.Client, options *ProcessorOptions, logger func(err error)) *Processor {
+func NewProcessor(client *camunda_client_go.Client, options *ProcessorOptions, logger func(err error)) (*Processor, error) {
 	if options.WorkerId == "" {
 		options.WorkerId = fmt.Sprintf("worker-%d", rand.Int())
+	}
+
+	if options.MaxParallelTaskPerHandler < 1 {
+		return nil, fmt.Errorf("MaxParallelTaskPerHandler must be greater than 0")
+	}
+
+	if options.LockDuration < 1 {
+		return nil, fmt.Errorf("LockDuration must be greater than 0")
+	}
+
+	if options.AsyncResponseTimeout != nil && *options.AsyncResponseTimeout < 1 {
+		return nil, fmt.Errorf("AsyncResponseTimeout must be greater than 0")
 	}
 
 	return &Processor{
 		client:  client,
 		options: options,
 		logger:  logger,
-	}
+	}, nil
 }
 
 // Handler a handler for external task
