@@ -73,13 +73,17 @@ logger := func(err error) {
 	fmt.Println(err.Error())
 }
 asyncResponseTimeout := 5000
-proc := processor.NewProcessor(client, &processor.ProcessorOptions{
+proc, err := processor.NewProcessor(client, &processor.ProcessorOptions{
     WorkerId: "demo-worker",
     LockDuration: time.Second * 5,
     MaxTasks: 10,
     MaxParallelTaskPerHandler: 100,
     AsyncResponseTimeout: &asyncResponseTimeout,
 }, logger)
+if err != nil {
+    fmt.Printf("Can`t create processor: %s\n", err)
+    os.Exit(1)
+}
 ```
 
 Add and subscribe external task handler: 
