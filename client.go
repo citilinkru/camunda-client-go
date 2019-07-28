@@ -231,3 +231,7 @@ func (c *Client) buildUrl(path string, query map[string]string) (string, error) 
 	url.RawQuery = q.Encode()
 	return url.String(), nil
 }
+
+func (c *Client) GetHttpClient() *http.Client {
+	return c.httpClient
+}
