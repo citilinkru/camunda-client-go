@@ -232,6 +232,7 @@ func (c *Client) buildUrl(path string, query map[string]string) (string, error) 
 	return url.String(), nil
 }
 
+// GetHttpClient gets underlying http client
 func (c *Client) GetHttpClient() *http.Client {
 	return c.httpClient
 }
