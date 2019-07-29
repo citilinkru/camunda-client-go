@@ -3,7 +3,7 @@ package processor
 import (
 	"errors"
 	"fmt"
-	"github.com/citilinkru/camunda-client-go"
+	"github.com/incubus8/camunda-client-go"
 	"math/rand"
 	"runtime/debug"
 	"time"
