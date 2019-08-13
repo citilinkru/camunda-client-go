@@ -29,7 +29,11 @@ type ProcessorOptions struct {
 	// use priority
 	UsePriority *bool
 	// long polling timeout
+	//
+	// Deprecated: Use LongPollingTimeout instead
 	AsyncResponseTimeout *int
+	// long polling timeout
+	LongPollingTimeout time.Duration
 }
 
 // NewProcessor a create new instance Processor
@@ -107,11 +111,20 @@ func (p *Processor) AddHandler(topics *[]camunda_client_go.QueryFetchAndLockTopi
 			}
 		}
 	}
+
+	var asyncResponseTimeout *int
+	if p.options.AsyncResponseTimeout != nil {
+		asyncResponseTimeout = p.options.AsyncResponseTimeout
+	} else if p.options.LongPollingTimeout.Nanoseconds() > 0 {
+		msValue := int(p.options.LongPollingTimeout.Nanoseconds() / int64(time.Millisecond))
+		asyncResponseTimeout = &msValue
+	}
+
 	go p.startPuller(camunda_client_go.QueryFetchAndLock{
 		WorkerId:             p.options.WorkerId,
 		MaxTasks:             p.options.MaxTasks,
 		UsePriority:          p.options.UsePriority,
-		AsyncResponseTimeout: p.options.AsyncResponseTimeout,
+		AsyncResponseTimeout: asyncResponseTimeout,
 		Topics:               topics,
 	}, handler)
 }
