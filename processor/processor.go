@@ -119,8 +119,13 @@ func (p *Processor) AddHandler(topics *[]camunda_client_go.QueryFetchAndLockTopi
 func (p *Processor) startPuller(query camunda_client_go.QueryFetchAndLock, handler Handler) {
 	var tasksChan = make(chan *camunda_client_go.ResLockedExternalTask)
 
+	maxParallelTaskPerHandler := p.options.MaxParallelTaskPerHandler
+	if maxParallelTaskPerHandler < 1 {
+		maxParallelTaskPerHandler = 1
+	}
+
 	// create worker pool
-	for i := 0; i < p.options.MaxParallelTaskPerHandler; i++ {
+	for i := 0; i < maxParallelTaskPerHandler; i++ {
 		go p.runWorker(handler, tasksChan)
 	}
 
