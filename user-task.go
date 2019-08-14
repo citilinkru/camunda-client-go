@@ -361,6 +361,10 @@ func (t *userTaskApi) Get(id string) (*UserTaskResponse, error) {
 
 // GetList retrieves task list
 func (t *userTaskApi) GetList(query *UserTaskGetListQuery) ([]UserTask, error) {
+	if query == nil {
+		query = &UserTaskGetListQuery{}
+	}
+
 	queryParams := map[string]string{}
 
 	if query.MaxResults > 0 {
@@ -390,6 +394,10 @@ func (t *userTaskApi) GetList(query *UserTaskGetListQuery) ([]UserTask, error) {
 
 // GetListCount retrieves task list count
 func (t *userTaskApi) GetListCount(query *UserTaskGetListQuery) (int64, error) {
+	if query == nil {
+		query = &UserTaskGetListQuery{}
+	}
+
 	queryParams := map[string]string{}
 
 	res, err := t.client.doPostJson("/task/count", queryParams, query)
