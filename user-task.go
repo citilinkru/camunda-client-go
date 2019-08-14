@@ -363,9 +363,12 @@ func (t *userTaskApi) Get(id string) (*UserTaskResponse, error) {
 func (t *userTaskApi) GetList(query *UserTaskGetListQuery) ([]UserTask, error) {
 	queryParams := map[string]string{}
 
-	if query.FirstResult > 0 && query.MaxResults > 0 {
-		queryParams["firstResult"] = fmt.Sprintf("%d", query.FirstResult)
+	if query.MaxResults > 0 {
 		queryParams["maxResults"] = fmt.Sprintf("%d", query.MaxResults)
+	}
+
+	if query.FirstResult > 0 {
+		queryParams["firstResult"] = fmt.Sprintf("%d", query.FirstResult)
 	}
 
 	res, err := t.client.doPostJson("/task", queryParams, query)
