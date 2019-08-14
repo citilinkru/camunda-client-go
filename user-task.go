@@ -59,7 +59,7 @@ type UserTaskResponse struct {
 
 // UserTask camunda user task
 type UserTask struct {
-	UserTaskResponse
+	*UserTaskResponse
 
 	api *userTaskApi
 }
@@ -345,8 +345,8 @@ func (q *UserTaskGetListQuery) MarshalJSON() ([]byte, error) {
 }
 
 // Get retrieves a task by id
-func (t *userTaskApi) Get(id string) (*UserTaskResponse, error) {
-	res, err := t.client.doPost("/task/"+id, map[string]string{})
+func (t *userTaskApi) Get(id string) (*UserTask, error) {
+	res, err := t.client.doGet("/task/"+id, map[string]string{})
 	if err != nil {
 		return nil, err
 	}
@@ -356,7 +356,10 @@ func (t *userTaskApi) Get(id string) (*UserTaskResponse, error) {
 		return nil, fmt.Errorf("can't read json response: %s", err)
 	}
 
-	return &resp, nil
+	return &UserTask{
+		api:              t,
+		UserTaskResponse: &resp,
+	}, nil
 }
 
 // GetList retrieves task list
