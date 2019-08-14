@@ -38,6 +38,7 @@ type Client struct {
 	ExternalTask      *ExternalTask
 	Deployment        *Deployment
 	ProcessDefinition *ProcessDefinition
+	UserTask          *userTaskApi
 }
 
 // Error a custom error type
@@ -68,6 +69,15 @@ func (t *Time) MarshalJSON() ([]byte, error) {
 	return []byte("\"" + timeStr + "\""), nil
 }
 
+// toCamundaTime return time formatted for camunda
+func toCamundaTime(dt time.Time) string {
+	if dt.IsZero() {
+		return ""
+	}
+
+	return dt.Format(DefaultDateTimeFormat)
+}
+
 // NewClient a create new instance Client
 func NewClient(options ClientOptions) *Client {
 	client := &Client{
@@ -95,6 +105,7 @@ func NewClient(options ClientOptions) *Client {
 	client.ExternalTask = &ExternalTask{client: client}
 	client.Deployment = &Deployment{client: client}
 	client.ProcessDefinition = &ProcessDefinition{client: client}
+	client.UserTask = &userTaskApi{client: client}
 
 	return client
 }
