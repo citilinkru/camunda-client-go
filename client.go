@@ -41,6 +41,11 @@ type Client struct {
 	UserTask          *userTaskApi
 }
 
+var ErrorNotFound = &Error{
+	Type:    "NotFound",
+	Message: "Not found",
+}
+
 // Error a custom error type
 type Error struct {
 	Type    string `json:"type"`
@@ -197,6 +202,10 @@ func (c *Client) checkResponse(res *http.Response) error {
 	defer res.Body.Close()
 
 	if res.Header.Get("Content-Type") == "application/json" {
+		if res.StatusCode == 404 {
+			return ErrorNotFound
+		}
+
 		jsonErr := &Error{}
 		err := json.NewDecoder(res.Body).Decode(jsonErr)
 		if err != nil {
@@ -204,7 +213,6 @@ func (c *Client) checkResponse(res *http.Response) error {
 		}
 
 		return jsonErr
-
 	}
 
 	errText, err := ioutil.ReadAll(res.Body)
