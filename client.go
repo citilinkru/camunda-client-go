@@ -229,7 +229,7 @@ func (c *Client) buildUrl(path string, query map[string]string) (string, error) 
 	if len(query) == 0 {
 		return c.endpointUrl + path, nil
 	}
-	url, err := url.Parse(c.endpointUrl)
+	url, err := url.Parse(c.endpointUrl + path)
 	if err != nil {
 		return "", err
 	}
