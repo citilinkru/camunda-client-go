@@ -4,7 +4,6 @@ import (
 	"fmt"
 	camunda_client_go "github.com/citilinkru/camunda-client-go"
 	"github.com/citilinkru/camunda-client-go/processor"
-	"os"
 	"time"
 )
 
@@ -26,10 +25,6 @@ func main() {
 		MaxParallelTaskPerHandler: 100,
 		LongPollingTimeout:        5 * time.Second,
 	}, logger)
-	if err != nil {
-		fmt.Printf("Can`t create processor: %s\n", err)
-		os.Exit(1)
-	}
 
 	proc.AddHandler(
 		&[]camunda_client_go.QueryFetchAndLockTopic{
