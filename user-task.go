@@ -425,7 +425,13 @@ func (t *userTaskApi) Complete(id string, variables map[string]Variable) error {
 		variables = map[string]Variable{}
 	}
 
-	_, err := t.client.doPostJson("/task/"+id+"/complete", map[string]string{}, &variables)
+	payload := struct {
+		Variables map[string]Variable `json:"variables"`
+	}{
+		Variables: variables,
+	}
+
+	_, err := t.client.doPostJson("/task/"+id+"/complete", map[string]string{}, &payload)
 	if err != nil {
 		return fmt.Errorf("can't post json: %s", err)
 	}
