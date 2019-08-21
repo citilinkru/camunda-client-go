@@ -65,8 +65,8 @@ type UserTask struct {
 }
 
 // Complete complete user task
-func (t *UserTask) Complete(variables map[string]Variable) error {
-	err := t.api.Complete(t.Id, variables)
+func (t *UserTask) Complete(query QueryUserTaskComplete) error {
+	err := t.api.Complete(t.Id, query)
 	if err != nil {
 		return fmt.Errorf("can't complete task: %s", err)
 	}
@@ -309,6 +309,12 @@ type UserTaskGetListQuery struct {
 	MaxResults int64 `json:"maxResults,omitempty"`
 }
 
+// QueryUserTaskComplete a query for Complete user task request
+type QueryUserTaskComplete struct {
+	// A JSON object containing variable key-value pairs
+	Variables map[string]Variable `json:"variables"`
+}
+
 // MarshalJSON marshal to json
 func (q *UserTaskGetListQuery) MarshalJSON() ([]byte, error) {
 	type Alias UserTaskGetListQuery
@@ -420,18 +426,8 @@ func (t *userTaskApi) GetListCount(query *UserTaskGetListQuery) (int64, error) {
 }
 
 // Complete complete user task by id
-func (t *userTaskApi) Complete(id string, variables map[string]Variable) error {
-	if variables == nil {
-		variables = map[string]Variable{}
-	}
-
-	payload := struct {
-		Variables map[string]Variable `json:"variables"`
-	}{
-		Variables: variables,
-	}
-
-	_, err := t.client.doPostJson("/task/"+id+"/complete", map[string]string{}, &payload)
+func (t *userTaskApi) Complete(id string, query QueryUserTaskComplete) error {
+	_, err := t.client.doPostJson("/task/"+id+"/complete", map[string]string{}, query)
 	if err != nil {
 		return fmt.Errorf("can't post json: %s", err)
 	}
