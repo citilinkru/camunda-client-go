@@ -16,7 +16,7 @@ func main() {
 	})
 
 	query := camunda_client_go.UserTaskGetListQuery{
-		CreatedAfter: time.Now().Add(-50 * time.Hour),
+		CreatedAfter: time.Now().Add(-500 * time.Hour),
 	}
 
 	cnt, err := client.UserTask.GetListCount(&query)
@@ -36,7 +36,7 @@ func main() {
 	for i, taks := range tasks {
 		fmt.Printf("%02d. UserTask: %s - %s - ", i+1, taks.Id, taks.Name)
 
-		err = taks.Complete(nil)
+		err = taks.Complete(camunda_client_go.QueryUserTaskComplete{})
 		if err != nil {
 			fmt.Printf("ERROR: %s", err)
 		} else {
