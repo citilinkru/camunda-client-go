@@ -3,10 +3,11 @@ package processor
 import (
 	"errors"
 	"fmt"
-	"github.com/citilinkru/camunda-client-go"
 	"math/rand"
 	"runtime/debug"
 	"time"
+
+	camunda_client_go "github.com/citilinkru/camunda-client-go"
 )
 
 // Processor external task processor
@@ -130,12 +131,18 @@ func (p *Processor) startPuller(query camunda_client_go.QueryFetchAndLock, handl
 		go p.runWorker(handler, tasksChan)
 	}
 
+	retries := 0
 	for {
 		tasks, err := p.client.ExternalTask.FetchAndLock(query)
 		if err != nil {
-			p.logger(fmt.Errorf("failed pull: %s", err))
+			if retries < 60 {
+				retries += 1
+			}
+			p.logger(fmt.Errorf("failed pull: %s, sleeping: %d seconds", err, retries))
+			time.Sleep(time.Duration(retries) * time.Second)
 			continue
 		}
+		retries = 0
 
 		for _, task := range tasks {
 			tasksChan <- task
