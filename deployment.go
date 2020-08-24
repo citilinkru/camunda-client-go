@@ -18,13 +18,13 @@ type Deployment struct {
 // ResDeployment a JSON array of deployment objects
 type ResDeployment struct {
 	// The id of the deployment
-	Id string `json:"id"`
+	ID string `json:"id"`
 	// The name of the deployment
 	Name string `json:"name"`
 	// The source of the deployment
 	Source string `json:"source"`
 	// The tenant id of the deployment
-	TenantId string `json:"tenantId"`
+	TenantID string `json:"tenantId"`
 	// The date and time of the deployment.
 	DeploymentTime Time `json:"deploymentTime"`
 }
@@ -32,13 +32,13 @@ type ResDeployment struct {
 // ResDeploymentCreate a JSON object corresponding to the DeploymentWithDefinitions interface in the engine
 type ResDeploymentCreate struct {
 	// The id of the deployment
-	Id string `json:"id"`
+	ID string `json:"id"`
 	// The name of the deployment
 	Name string `json:"name"`
 	// The source of the deployment
 	Source string `json:"source"`
 	// The tenant id of the deployment
-	TenantId string `json:"tenant_id"`
+	TenantID string `json:"tenant_id"`
 	// The time when the deployment was created
 	DeploymentTime Time `json:"deployment_time"`
 	// Link to the newly created deployment with method, href and rel
@@ -63,7 +63,7 @@ type ReqDeploymentCreate struct {
 	EnableDuplicateFiltering *bool
 	DeployChangedOnly        *bool
 	DeploymentSource         *string
-	TenantId                 *string
+	TenantID                 *string
 	Resources                map[string]interface{}
 }
 
@@ -80,11 +80,11 @@ type ReqRedeploy struct {
 // ResDeploymentResource a JSON array containing all deployment resources of the given deployment
 type ResDeploymentResource struct {
 	// The id of the deployment resource
-	Id string `json:"id"`
+	ID string `json:"id"`
 	// The name of the deployment resource
 	Name string `json:"name"`
 	// The id of the deployment
-	DeploymentId string `json:"deploymentId"`
+	DeploymentID string `json:"deploymentId"`
 }
 
 // GetList a queries for deployments that fulfill given parameters. Parameters may be the properties of deployments,
@@ -98,7 +98,7 @@ func (d *Deployment) GetList(query map[string]string) (deployments []*ResDeploym
 		return
 	}
 
-	err = d.client.readJsonResponse(res, &deployments)
+	err = d.client.readJSONResponse(res, &deployments)
 	return
 }
 
@@ -111,7 +111,7 @@ func (d *Deployment) GetListCount(query map[string]string) (count int, err error
 	}
 
 	resCount := ResCount{}
-	err = d.client.readJsonResponse(res, &resCount)
+	err = d.client.readJSONResponse(res, &resCount)
 	return resCount.Count, err
 }
 
@@ -122,7 +122,7 @@ func (d *Deployment) Get(id string) (deployment ResDeployment, err error) {
 		return
 	}
 
-	err = d.client.readJsonResponse(res, &deployment)
+	err = d.client.readJSONResponse(res, &deployment)
 	return
 }
 
@@ -155,8 +155,8 @@ func (d *Deployment) Create(deploymentCreate ReqDeploymentCreate) (deployment *R
 		}
 	}
 
-	if deploymentCreate.TenantId != nil {
-		if err = w.WriteField("tenant-id", *deploymentCreate.TenantId); err != nil {
+	if deploymentCreate.TenantID != nil {
+		if err = w.WriteField("tenant-id", *deploymentCreate.TenantID); err != nil {
 			return nil, err
 		}
 	}
@@ -194,7 +194,7 @@ func (d *Deployment) Create(deploymentCreate ReqDeploymentCreate) (deployment *R
 		return nil, err
 	}
 
-	err = d.client.readJsonResponse(res, deployment)
+	err = d.client.readJSONResponse(res, deployment)
 
 	return deployment, err
 }
@@ -205,12 +205,12 @@ func (d *Deployment) Create(deploymentCreate ReqDeploymentCreate) (deployment *R
 // are re-deployed
 func (d *Deployment) Redeploy(id string, req ReqRedeploy) (deployment *ResDeploymentCreate, err error) {
 	deployment = &ResDeploymentCreate{}
-	res, err := d.client.doPostJson("/deployment/"+id+"/redeploy", map[string]string{}, &req)
+	res, err := d.client.doPostJSON("/deployment/"+id+"/redeploy", map[string]string{}, &req)
 	if err != nil {
 		return
 	}
 
-	err = d.client.readJsonResponse(res, deployment)
+	err = d.client.readJSONResponse(res, deployment)
 	return
 }
 
@@ -221,25 +221,25 @@ func (d *Deployment) GetResources(id string) (resources []*ResDeploymentResource
 		return
 	}
 
-	err = d.client.readJsonResponse(res, &resources)
+	err = d.client.readJSONResponse(res, &resources)
 	return
 }
 
 // GetResource retrieves a deployment resource by resource id for the given deployment
-func (d *Deployment) GetResource(id, resourceId string) (resource *ResDeploymentResource, err error) {
+func (d *Deployment) GetResource(id, resourceID string) (resource *ResDeploymentResource, err error) {
 	resource = &ResDeploymentResource{}
-	res, err := d.client.doGet("/deployment/"+id+"/resources/"+resourceId, map[string]string{})
+	res, err := d.client.doGet("/deployment/"+id+"/resources/"+resourceID, map[string]string{})
 	if err != nil {
 		return
 	}
 
-	err = d.client.readJsonResponse(res, &resource)
+	err = d.client.readJSONResponse(res, &resource)
 	return
 }
 
 // GetResourceBinary retrieves the binary content of a deployment resource for the given deployment by id
-func (d *Deployment) GetResourceBinary(id, resourceId string) (data []byte, err error) {
-	res, err := d.client.doGet("/deployment/"+id+"/resources/"+resourceId+"/data", map[string]string{})
+func (d *Deployment) GetResourceBinary(id, resourceID string) (data []byte, err error) {
+	res, err := d.client.doGet("/deployment/"+id+"/resources/"+resourceID+"/data", map[string]string{})
 	if err != nil {
 		return
 	}

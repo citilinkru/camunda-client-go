@@ -4,7 +4,7 @@ package camundaclient
 // interface in the engine
 type ResDecisionRequirementsDefinition struct {
 	// The id of the decision requirements definition
-	Id string `json:"id"`
+	ID string `json:"id"`
 	// The key of the decision requirements definition, i.e., the id of the DMN 1.1 XML decision definition
 	Key string `json:"key"`
 	// The category of the decision requirements definition
@@ -16,7 +16,7 @@ type ResDecisionRequirementsDefinition struct {
 	// The file name of the decision requirements definition
 	Resource string `json:"resource"`
 	// The deployment id of the decision requirements definition
-	DeploymentId string `json:"deploymentId"`
+	DeploymentID string `json:"deploymentId"`
 	// The tenant id of the decision requirements definition
-	TenantId string `json:"tenantId"`
+	TenantID string `json:"tenantId"`
 }

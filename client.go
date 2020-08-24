@@ -12,25 +12,27 @@ import (
 	"time"
 )
 
-const PackageVersion = "{{version}}"
-const DefaultUserAgent = "CamundaClientGo/" + PackageVersion
-const DefaultEndpointUrl = "http://localhost:8080/engine-rest"
-const DefaultTimeoutSec = 60
-const DefaultDateTimeFormat = "2006-01-02T15:04:05.000-0700"
+const (
+	PackageVersion        = "1.0"
+	DefaultUserAgent      = "CamundaClientGo/" + PackageVersion
+	DefaultEndpointURL    = "http://localhost:8080/engine-rest"
+	DefaultTimeoutSec     = 60
+	DefaultDateTimeFormat = "2006-01-02T15:04:05.000-0700"
+)
 
 // ClientOptions a client options
 type ClientOptions struct {
 	UserAgent   string
-	EndpointUrl string
+	EndpointURL string
 	Timeout     time.Duration
-	ApiUser     string
-	ApiPassword string
+	APIUser     string
+	APIPassword string
 }
 
 // Client a client for Camunda API
 type Client struct {
 	httpClient  *http.Client
-	endpointUrl string
+	endpointURL string
 	userAgent   string
 	apiUser     string
 	apiPassword string
@@ -38,7 +40,7 @@ type Client struct {
 	ExternalTask      *ExternalTask
 	Deployment        *Deployment
 	ProcessDefinition *ProcessDefinition
-	UserTask          *userTaskApi
+	UserTask          *userTaskAPI
 }
 
 var ErrorNotFound = &Error{
@@ -62,13 +64,13 @@ type Time struct {
 	time.Time
 }
 
-// UnmarshalJSON
+// UnmarshalJSON ...
 func (t *Time) UnmarshalJSON(b []byte) (err error) {
 	t.Time, err = time.Parse(DefaultDateTimeFormat, strings.Trim(string(b), "\""))
 	return
 }
 
-// MarshalJSON
+// MarshalJSON ...
 func (t *Time) MarshalJSON() ([]byte, error) {
 	timeStr := t.Time.Format(DefaultDateTimeFormat)
 	return []byte("\"" + timeStr + "\""), nil
@@ -89,14 +91,14 @@ func NewClient(options ClientOptions) *Client {
 		httpClient: &http.Client{
 			Timeout: time.Second * DefaultTimeoutSec,
 		},
-		endpointUrl: DefaultEndpointUrl,
+		endpointURL: DefaultEndpointURL,
 		userAgent:   DefaultUserAgent,
-		apiUser:     options.ApiUser,
-		apiPassword: options.ApiPassword,
+		apiUser:     options.APIUser,
+		apiPassword: options.APIPassword,
 	}
 
-	if options.EndpointUrl != "" {
-		client.endpointUrl = options.EndpointUrl
+	if options.EndpointURL != "" {
+		client.endpointURL = options.EndpointURL
 	}
 
 	if options.UserAgent != "" {
@@ -110,7 +112,7 @@ func NewClient(options ClientOptions) *Client {
 	client.ExternalTask = &ExternalTask{client: client}
 	client.Deployment = &Deployment{client: client}
 	client.ProcessDefinition = &ProcessDefinition{client: client}
-	client.UserTask = &userTaskApi{client: client}
+	client.UserTask = &userTaskAPI{client: client}
 
 	return client
 }
@@ -122,7 +124,7 @@ func (c *Client) SetCustomTransport(customHTTPTransport http.RoundTripper) {
 	}
 }
 
-func (c *Client) doPostJson(path string, query map[string]string, v interface{}) (res *http.Response, err error) {
+func (c *Client) doPostJSON(path string, query map[string]string, v interface{}) (res *http.Response, err error) {
 	body := new(bytes.Buffer)
 	if err := json.NewEncoder(body).Encode(v); err != nil {
 		return nil, err
@@ -136,7 +138,7 @@ func (c *Client) doPostJson(path string, query map[string]string, v interface{})
 	return res, nil
 }
 
-func (c *Client) doPutJson(path string, query map[string]string, v interface{}) (res *http.Response, err error) {
+func (c *Client) doPutJSON(path string, query map[string]string, v interface{}) (res *http.Response, err error) {
 	body := new(bytes.Buffer)
 	if err := json.NewEncoder(body).Encode(v); err != nil {
 		return nil, err
@@ -163,7 +165,7 @@ func (c *Client) doPut(path string, query map[string]string) (res *http.Response
 }
 
 func (c *Client) do(method, path string, query map[string]string, body io.Reader, contentType string) (res *http.Response, err error) {
-	url, err := c.buildUrl(path, query)
+	url, err := c.buildURL(path, query)
 	if err != nil {
 		return nil, err
 	}
@@ -223,7 +225,7 @@ func (c *Client) checkResponse(res *http.Response) error {
 	return fmt.Errorf("response error with status code %d", res.StatusCode)
 }
 
-func (c *Client) readJsonResponse(res *http.Response, v interface{}) error {
+func (c *Client) readJSONResponse(res *http.Response, v interface{}) error {
 	defer res.Body.Close()
 	err := json.NewDecoder(res.Body).Decode(v)
 	if err != nil {
@@ -233,11 +235,11 @@ func (c *Client) readJsonResponse(res *http.Response, v interface{}) error {
 	return nil
 }
 
-func (c *Client) buildUrl(path string, query map[string]string) (string, error) {
+func (c *Client) buildURL(path string, query map[string]string) (string, error) {
 	if len(query) == 0 {
-		return c.endpointUrl + path, nil
+		return c.endpointURL + path, nil
 	}
-	url, err := url.Parse(c.endpointUrl + path)
+	url, err := url.Parse(c.endpointURL + path)
 	if err != nil {
 		return "", err
 	}

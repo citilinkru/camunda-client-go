@@ -31,7 +31,7 @@ func main() {
 			{TopicName: "PrintHello"},
 		},
 		func(ctx *processor.Context) error {
-			fmt.Printf("Running task %s. WorkerId: %s. TopicName: %s\n", ctx.Task.Id, ctx.Task.WorkerId, ctx.Task.TopicName)
+			fmt.Printf("Running task %s. WorkerID: %s. TopicName: %s\n", ctx.Task.Id, ctx.Task.WorkerId, ctx.Task.TopicName)
 
 			time.Sleep(time.Second * 1)
 			fmt.Println("Hello")
@@ -55,7 +55,7 @@ func main() {
 			{TopicName: "PrintWorld"},
 		},
 		func(ctx *processor.Context) error {
-			fmt.Printf("Running task %s. WorkerId: %s. TopicName: %s\n", ctx.Task.Id, ctx.Task.WorkerId, ctx.Task.TopicName)
+			fmt.Printf("Running task %s. WorkerID: %s. TopicName: %s\n", ctx.Task.Id, ctx.Task.WorkerId, ctx.Task.TopicName)
 
 			time.Sleep(time.Second * 1)
 			fmt.Println("World")

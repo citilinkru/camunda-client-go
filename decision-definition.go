@@ -3,7 +3,7 @@ package camundaclient
 // ResDecisionDefinition a JSON object corresponding to the DecisionDefinition interface in the engine
 type ResDecisionDefinition struct {
 	// The id of the decision definition
-	Id string `json:"id"`
+	ID string `json:"id"`
 	// The key of the decision definition, i.e., the id of the DMN 1.0 XML decision definition
 	Key string `json:"key"`
 	// The category of the decision definition
@@ -15,11 +15,11 @@ type ResDecisionDefinition struct {
 	// The file name of the decision definition
 	Resource string `json:"resource"`
 	// The deployment id of the decision definition
-	DeploymentId string `json:"deploymentId"`
+	DeploymentID string `json:"deploymentId"`
 	// The tenant id of the decision definition
-	TenantId string `json:"tenantId"`
+	TenantID string `json:"tenantId"`
 	// The id of the decision requirements definition this decision definition belongs to
-	DecisionRequirementsDefinitionId string `json:"decisionRequirementsDefinitionId"`
+	DecisionRequirementsDefinitionID string `json:"decisionRequirementsDefinitionId"`
 	// The key of the decision requirements definition this decision definition belongs to
 	DecisionRequirementsDefinitionKey string `json:"decisionRequirementsDefinitionKey"`
 	// The version tag of the process definition

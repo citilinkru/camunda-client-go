@@ -6,15 +6,15 @@ import (
 	"time"
 )
 
-// userTaskApi a client for userTaskApi API
-type userTaskApi struct {
+// userTaskAPI a client for userTaskAPI API
+type userTaskAPI struct {
 	client *Client
 }
 
 // UserTaskResponse get task response
 type UserTaskResponse struct {
 	// The id of the task.
-	Id string `json:"id"`
+	ID string `json:"id"`
 	// The tasks name.
 	Name string `json:"name"`
 	// The user assigned to this task.
@@ -30,23 +30,23 @@ type UserTaskResponse struct {
 	// The task description.
 	Description string `json:"description"`
 	// The id of the execution the task belongs to.
-	ExecutionId string `json:"executionId"`
+	ExecutionID string `json:"executionId"`
 	// The owner of the task.
 	Owner string `json:"owner"`
 	// The id of the parent task, if this task is a subtask.
-	ParentTaskId string `json:"parentTaskId"`
+	ParentTaskID string `json:"parentTaskId"`
 	// The priority of the task.
 	Priority int64 `json:"priority"`
 	// The id of the process definition this task belongs to.
-	ProcessDefinitionId string `json:"processDefinitionId"`
+	ProcessDefinitionID string `json:"processDefinitionId"`
 	// The id of the process instance this task belongs to.
-	ProcessInstanceId string `json:"processInstanceId"`
+	ProcessInstanceID string `json:"processInstanceId"`
 	// The id of the case execution the task belongs to.
-	CaseExecutionId string `json:"caseExecutionId"`
+	CaseExecutionID string `json:"caseExecutionId"`
 	// The id of the case definition the task belongs to.
-	CaseDefinitionId string `json:"caseDefinitionId"`
+	CaseDefinitionID string `json:"caseDefinitionId"`
 	// The id of the case instance the task belongs to.
-	CaseInstanceId string `json:"caseInstanceId"`
+	CaseInstanceID string `json:"caseInstanceId"`
 	// The task definition key.
 	TaskDefinitionKey string `json:"taskDefinitionKey"`
 	// Whether the task belongs to a process instance that is suspended.
@@ -54,19 +54,19 @@ type UserTaskResponse struct {
 	// If not null, the form key for the task.
 	FormKey *string `json:"formKey"`
 	// If not null, the tenantId for the task.
-	TenantId *string `json:"tenantId"`
+	TenantID *string `json:"tenantId"`
 }
 
 // UserTask camunda user task
 type UserTask struct {
 	*UserTaskResponse
 
-	api *userTaskApi
+	api *userTaskAPI
 }
 
 // Complete complete user task
 func (t *UserTask) Complete(query QueryUserTaskComplete) error {
-	err := t.api.Complete(t.Id, query)
+	err := t.api.Complete(t.ID, query)
 	if err != nil {
 		return fmt.Errorf("can't complete task: %s", err)
 	}
@@ -105,7 +105,7 @@ type VariableFilterExpression struct {
 // UserTaskGetListQuery query for GetList,
 type UserTaskGetListQuery struct {
 	// Restrict to tasks that belong to process instances with the given id.
-	ProcessInstanceId string `json:"processInstanceId,omitempty"`
+	ProcessInstanceID string `json:"processInstanceId,omitempty"`
 	// Restrict to tasks that belong to process instances with the given business key.
 	ProcessInstanceBusinessKey string `json:"processInstanceBusinessKey,omitempty"`
 	// Restrict to tasks that belong to process instances with one of the give business keys. The keys need to be in a comma-separated list.
@@ -113,7 +113,7 @@ type UserTaskGetListQuery struct {
 	// Restrict to tasks that have a process instance business key that has the parameter value as a substring.
 	ProcessInstanceBusinessKeyLike string `json:"processInstanceBusinessKeyLike,omitempty"`
 	// Restrict to tasks that belong to a process definition with the given id.
-	ProcessDefinitionId string `json:"processDefinitionId,omitempty"`
+	ProcessDefinitionID string `json:"processDefinitionId,omitempty"`
 	// Restrict to tasks that belong to a process definition with the given key.
 	ProcessDefinitionKey string `json:"processDefinitionKey,omitempty"`
 	// Restrict to tasks that belong to a process definition with one of the given keys. The keys need to be in a comma-separated list.
@@ -123,15 +123,15 @@ type UserTaskGetListQuery struct {
 	// Restrict to tasks that have a process definition name that has the parameter value as a substring.
 	ProcessDefinitionNameLike string `json:"processDefinitionNameLike,omitempty"`
 	// Restrict to tasks that belong to an execution with the given id.
-	ExecutionId string `json:"executionId,omitempty"`
+	ExecutionID string `json:"executionId,omitempty"`
 	// Restrict to tasks that belong to case instances with the given id.
-	CaseInstanceId string `json:"caseInstanceId,omitempty"`
+	CaseInstanceID string `json:"caseInstanceId,omitempty"`
 	// Restrict to tasks that belong to case instances with the given business key.
 	CaseInstanceBusinessKey string `json:"caseInstanceBusinessKey,omitempty"`
 	// Restrict to tasks that have a case instance business key that has the parameter value as a substring.
 	CaseInstanceBusinessKeyLike string `json:"caseInstanceBusinessKeyLike,omitempty"`
 	// Restrict to tasks that belong to a case definition with the given id.
-	CaseDefinitionId string `json:"caseDefinitionId,omitempty"`
+	CaseDefinitionID string `json:"caseDefinitionId,omitempty"`
 	// Restrict to tasks that belong to a case definition with the given key.
 	CaseDefinitionKey string `json:"caseDefinitionKey,omitempty"`
 	// Restrict to tasks that belong to a case definition with the given name.
@@ -139,13 +139,13 @@ type UserTaskGetListQuery struct {
 	// Restrict to tasks that have a case definition name that has the parameter value as a substring.
 	CaseDefinitionNameLike string `json:"caseDefinitionNameLike,omitempty"`
 	// Restrict to tasks that belong to a case execution with the given id.
-	CaseExecutionId string `json:"caseExecutionId,omitempty"`
+	CaseExecutionID string `json:"caseExecutionId,omitempty"`
 	// Only include tasks which belong to one of the passed and comma-separated activity instance ids.
-	ActivityInstanceIdIn []string `json:"activityInstanceIdIn,omitempty"`
+	ActivityInstanceIDIn []string `json:"activityInstanceIdIn,omitempty"`
 	// Only include tasks which belong to one of the passed and comma-separated tenant ids.
-	TenantIdIn []string `json:"tenantIdIn,omitempty"`
+	TenantIDIn []string `json:"tenantIdIn,omitempty"`
 	// Only include tasks which belong to no tenant. Value may only be true, as false is the default behavior.
-	WithoutTenantId string `json:"withoutTenantId,omitempty"`
+	WithoutTenantID string `json:"withoutTenantId,omitempty"`
 	// Restrict to tasks that the given user is assigned to.
 	Assignee string `json:"assignee,omitempty"`
 	// Restrict to tasks that the user described by the given expression is assigned to. See the user guide for more information on available functions.
@@ -298,7 +298,7 @@ type UserTaskGetListQuery struct {
 	// key and value may not contain underscore or comma characters.
 	CaseInstanceVariables []VariableFilterExpression `json:"caseInstanceVariables,omitempty"`
 	// Restrict query to all tasks that are sub tasks of the given task.Takes a task id.
-	ParentTaskId string `json:"parentTaskId,omitempty"`
+	ParentTaskID string `json:"parentTaskId,omitempty"`
 	// Sort the results lexicographically by a given criterion.Valid values are instanceId, caseInstanceId, dueDate, executionId, caseExecutionId, assignee, created, description, id, name, nameCaseInsensitive and priority.Must be used in conjunction with the sortOrder parameter.
 	SortBy string `json:"sortBy,omitempty"`
 	// Sort the results in a given order.Values may be asc for ascending order or desc for descending order.Must be used in conjunction with the sortBy parameter.
@@ -351,14 +351,14 @@ func (q *UserTaskGetListQuery) MarshalJSON() ([]byte, error) {
 }
 
 // Get retrieves a task by id
-func (t *userTaskApi) Get(id string) (*UserTask, error) {
+func (t *userTaskAPI) Get(id string) (*UserTask, error) {
 	res, err := t.client.doGet("/task/"+id, map[string]string{})
 	if err != nil {
 		return nil, err
 	}
 
 	resp := UserTaskResponse{}
-	if err := t.client.readJsonResponse(res, &resp); err != nil {
+	if err := t.client.readJSONResponse(res, &resp); err != nil {
 		return nil, fmt.Errorf("can't read json response: %s", err)
 	}
 
@@ -369,7 +369,7 @@ func (t *userTaskApi) Get(id string) (*UserTask, error) {
 }
 
 // GetList retrieves task list
-func (t *userTaskApi) GetList(query *UserTaskGetListQuery) ([]UserTask, error) {
+func (t *userTaskAPI) GetList(query *UserTaskGetListQuery) ([]UserTask, error) {
 	if query == nil {
 		query = &UserTaskGetListQuery{}
 	}
@@ -384,13 +384,13 @@ func (t *userTaskApi) GetList(query *UserTaskGetListQuery) ([]UserTask, error) {
 		queryParams["firstResult"] = fmt.Sprintf("%d", query.FirstResult)
 	}
 
-	res, err := t.client.doPostJson("/task", queryParams, query)
+	res, err := t.client.doPostJSON("/task", queryParams, query)
 	if err != nil {
 		return nil, err
 	}
 
 	resp := []UserTask{}
-	if err := t.client.readJsonResponse(res, &resp); err != nil {
+	if err := t.client.readJSONResponse(res, &resp); err != nil {
 		return nil, fmt.Errorf("can't read json response: %s", err)
 	}
 
@@ -402,14 +402,14 @@ func (t *userTaskApi) GetList(query *UserTaskGetListQuery) ([]UserTask, error) {
 }
 
 // GetListCount retrieves task list count
-func (t *userTaskApi) GetListCount(query *UserTaskGetListQuery) (int64, error) {
+func (t *userTaskAPI) GetListCount(query *UserTaskGetListQuery) (int64, error) {
 	if query == nil {
 		query = &UserTaskGetListQuery{}
 	}
 
 	queryParams := map[string]string{}
 
-	res, err := t.client.doPostJson("/task/count", queryParams, query)
+	res, err := t.client.doPostJSON("/task/count", queryParams, query)
 	if err != nil {
 		return 0, err
 	}
@@ -418,7 +418,7 @@ func (t *userTaskApi) GetListCount(query *UserTaskGetListQuery) (int64, error) {
 		Count int64 `json:"count"`
 	}{}
 
-	if err := t.client.readJsonResponse(res, &resp); err != nil {
+	if err := t.client.readJSONResponse(res, &resp); err != nil {
 		return 0, fmt.Errorf("can't read json response: %s", err)
 	}
 
@@ -426,8 +426,8 @@ func (t *userTaskApi) GetListCount(query *UserTaskGetListQuery) (int64, error) {
 }
 
 // Complete complete user task by id
-func (t *userTaskApi) Complete(id string, query QueryUserTaskComplete) error {
-	_, err := t.client.doPostJson("/task/"+id+"/complete", map[string]string{}, query)
+func (t *userTaskAPI) Complete(id string, query QueryUserTaskComplete) error {
+	_, err := t.client.doPostJSON("/task/"+id+"/complete", map[string]string{}, query)
 	if err != nil {
 		return fmt.Errorf("can't post json: %s", err)
 	}

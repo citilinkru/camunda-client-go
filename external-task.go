@@ -12,9 +12,9 @@ type ExternalTask struct {
 // ResExternalTask a ExternalTask response
 type ResExternalTask struct {
 	// The id of the activity that this external task belongs to
-	ActivityId string `json:"activityId"`
+	ActivityID string `json:"activityId"`
 	// The id of the activity instance that the external task belongs to
-	ActivityInstanceId string `json:"activityInstanceId"`
+	ActivityInstanceID string `json:"activityInstanceId"`
 	// The full error message submitted with the latest reported failure executing this task;
 	// null if no failure was reported previously or if no error message was submitted
 	ErrorMessage string `json:"errorMessage"`
@@ -22,25 +22,25 @@ type ResExternalTask struct {
 	// null if no failure was reported previously or if no error details was submitted
 	ErrorDetails string `json:"errorDetails"`
 	// The id of the execution that the external task belongs to
-	ExecutionId string `json:"executionId"`
+	ExecutionID string `json:"executionId"`
 	// The id of the external task
-	Id string `json:"id"`
+	ID string `json:"id"`
 	// The date that the task's most recent lock expires or has expired
 	LockExpirationTime string `json:"lockExpirationTime"`
 	// The id of the process definition the external task is defined in
-	ProcessDefinitionId string `json:"processDefinitionId"`
+	ProcessDefinitionID string `json:"processDefinitionId"`
 	// The key of the process definition the external task is defined in
 	ProcessDefinitionKey string `json:"processDefinitionKey"`
 	// The id of the process instance the external task belongs to
-	ProcessInstanceId string `json:"processInstanceId"`
+	ProcessInstanceID string `json:"processInstanceId"`
 	// The id of the tenant the external task belongs to
-	TenantId string `json:"tenantId"`
+	TenantID string `json:"tenantId"`
 	// The number of retries the task currently has left
 	Retries int `json:"retries"`
 	// A flag indicating whether the external task is suspended or not
 	Suspended bool `json:"suspended"`
 	// The id of the worker that possesses or possessed the most recent lock
-	WorkerId string `json:"workerId"`
+	WorkerID string `json:"workerId"`
 	// The priority of the external task
 	Priority int `json:"priority"`
 	// The topic name of the external task
@@ -52,11 +52,11 @@ type ResExternalTask struct {
 // QueryGetListPost a query for ListPost request
 type QueryGetListPost struct {
 	// Filter by an external task's id
-	ExternalTaskId *string `json:"externalTaskId,omitempty"`
+	ExternalTaskID *string `json:"externalTaskId,omitempty"`
 	// Filter by an external task topic
 	TopicName *string `json:"topicName,omitempty"`
 	// Filter by the id of the worker that the task was most recently locked by
-	WorkerId *string `json:"workerId,omitempty"`
+	WorkerID *string `json:"workerId,omitempty"`
 	// Only include external tasks that are currently locked (i.e., they have a lock time and it has not expired).
 	// Value may only be true, as false matches any external task
 	Locked *bool `json:"locked,omitempty"`
@@ -75,17 +75,17 @@ type QueryGetListPost struct {
 	// the date must have the format yyyy-MM-dd'T'HH:mm:ss.SSSZ, e.g., 2013-01-23T14:42:45.000+0200
 	LockExpirationBefore *Time `json:"lockExpirationBefore,omitempty"`
 	// Filter by the id of the activity that an external task is created for
-	ActivityId *string `json:"activityId,omitempty"`
+	ActivityID *string `json:"activityId,omitempty"`
 	// Filter by the comma-separated list of ids of the activities that an external task is created for
-	ActivityIdIn *string `json:"activityIdIn,omitempty"`
+	ActivityIDIn *string `json:"activityIdIn,omitempty"`
 	// Filter by the id of the execution that an external task belongs to
-	ExecutionId *string `json:"executionId,omitempty"`
+	ExecutionID *string `json:"executionId,omitempty"`
 	// Filter by the id of the process instance that an external task belongs to
-	ProcessInstanceId *string `json:"processInstanceId,omitempty"`
+	ProcessInstanceID *string `json:"processInstanceId,omitempty"`
 	// Filter by the id of the process definition that an external task belongs to
-	ProcessDefinitionId *string `json:"processDefinitionId,omitempty"`
+	ProcessDefinitionID *string `json:"processDefinitionId,omitempty"`
 	// Filter by a comma-separated list of tenant ids. An external task must have one of the given tenant ids
-	TenantIdIn *string `json:"tenantIdIn,omitempty"`
+	TenantIDIn *string `json:"tenantIdIn,omitempty"`
 	// Only include active tasks. Value may only be true, as false matches any external task
 	Active *bool `json:"active,omitempty"`
 	// Only include suspended tasks. Value may only be true, as false matches any external task
@@ -104,7 +104,7 @@ type QueryGetListPost struct {
 type QueryFetchAndLock struct {
 	// Mandatory. The id of the worker on which behalf tasks are fetched. The returned tasks are locked
 	// for that worker and can only be completed when providing the same worker id
-	WorkerId string `json:"workerId"`
+	WorkerID string `json:"workerId"`
 	// Mandatory. The maximum number of tasks to return
 	MaxTasks int `json:"maxTasks"`
 	// A boolean value, which indicates whether the task should be fetched based on its priority or arbitrarily
@@ -132,17 +132,17 @@ type QueryFetchAndLockTopic struct {
 	// A String value which enables the filtering of tasks based on process instance business key
 	BusinessKey *string `json:"businessKey,omitempty"`
 	// Filter tasks based on process definition id
-	ProcessDefinitionId *string `json:"processDefinitionId,omitempty"`
+	ProcessDefinitionID *string `json:"processDefinitionId,omitempty"`
 	// Filter tasks based on process definition ids
-	ProcessDefinitionIdIn *string `json:"processDefinitionIdIn,omitempty"`
+	ProcessDefinitionIDIn *string `json:"processDefinitionIdIn,omitempty"`
 	// Filter tasks based on process definition key
 	ProcessDefinitionKey *string `json:"processDefinitionKey,omitempty"`
 	// Filter tasks based on process definition keys
 	ProcessDefinitionKeyIn *string `json:"processDefinitionKeyIn,omitempty"`
 	// 	Filter tasks without tenant id
-	WithoutTenantId *string `json:"withoutTenantId,omitempty"`
+	WithoutTenantID *string `json:"withoutTenantId,omitempty"`
 	// Filter tasks based on tenant ids
-	TenantIdIn *string `json:"tenantIdIn,omitempty"`
+	TenantIDIn *string `json:"tenantIdIn,omitempty"`
 	// A JSON object used for filtering tasks based on process instance variable values.
 	// A property name of the object represents a process variable name, while the property value
 	// represents the process variable value to filter tasks by
@@ -169,9 +169,9 @@ type QueryListPostSorting struct {
 // ResLockedExternalTask a response FetchAndLock method
 type ResLockedExternalTask struct {
 	// The id of the activity that this external task belongs to
-	ActivityId string `json:"activityId"`
+	ActivityID string `json:"activityId"`
 	// The id of the activity instance that the external task belongs to
-	ActivityInstanceId string `json:"activityInstanceId"`
+	ActivityInstanceID string `json:"activityInstanceId"`
 	// The full error message submitted with the latest reported failure executing this task;
 	// null if no failure was reported previously or if no error message was submitted
 	ErrorMessage string `json:"errorMessage"`
@@ -179,23 +179,23 @@ type ResLockedExternalTask struct {
 	// null if no failure was reported previously or if no error details was submitted
 	ErrorDetails string `json:"errorDetails"`
 	// The id of the execution that the external task belongs to
-	ExecutionId string `json:"executionId"`
+	ExecutionID string `json:"executionId"`
 	// The id of the external task
-	Id string `json:"id"`
+	ID string `json:"id"`
 	// The date that the task's most recent lock expires or has expired
 	LockExpirationTime string `json:"lockExpirationTime"`
 	// The id of the process definition the external task is defined in
-	ProcessDefinitionId string `json:"processDefinitionId"`
+	ProcessDefinitionID string `json:"processDefinitionId"`
 	// The key of the process definition the external task is defined in
 	ProcessDefinitionKey string `json:"processDefinitionKey"`
 	// The id of the process instance the external task belongs to
-	ProcessInstanceId string `json:"processInstanceId"`
+	ProcessInstanceID string `json:"processInstanceId"`
 	// The id of the tenant the external task belongs to
-	TenantId string `json:"tenantId"`
+	TenantID string `json:"tenantId"`
 	// The number of retries the task currently has left
 	Retries int `json:"retries"`
 	// The id of the worker that possesses or possessed the most recent lock
-	WorkerId string `json:"workerId"`
+	WorkerID string `json:"workerId"`
 	// The priority of the external task
 	Priority int `json:"priority"`
 	// The topic name of the external task
@@ -241,7 +241,7 @@ type ValueInfo struct {
 type QueryComplete struct {
 	// The id of the worker that completes the task.
 	// Must match the id of the worker who has most recently locked the task
-	WorkerId *string `json:"workerId,omitempty"`
+	WorkerID *string `json:"workerId,omitempty"`
 	// A JSON object containing variable key-value pairs
 	Variables *map[string]Variable `json:"variables"`
 	// A JSON object containing variable key-value pairs.
@@ -253,7 +253,7 @@ type QueryComplete struct {
 type QueryHandleBPMNError struct {
 	// The id of the worker that reports the failure.
 	// Must match the id of the worker who has most recently locked the task
-	WorkerId *string `json:"workerId,omitempty"`
+	WorkerID *string `json:"workerId,omitempty"`
 	// An error code that indicates the predefined error. Is used to identify the BPMN error handler
 	ErrorCode *string `json:"errorCode,omitempty"`
 	// An error message that describes the error
@@ -267,7 +267,7 @@ type QueryHandleBPMNError struct {
 type QueryHandleFailure struct {
 	// The id of the worker that reports the failure.
 	// Must match the id of the worker who has most recently locked the task
-	WorkerId *string `json:"workerId,omitempty"`
+	WorkerID *string `json:"workerId,omitempty"`
 	// An message indicating the reason of the failure
 	ErrorMessage *string `json:"errorMessage,omitempty"`
 	// A detailed error description
@@ -285,7 +285,7 @@ type QueryExtendLock struct {
 	//	An amount of time (in milliseconds). This is the new lock duration starting from the current moment
 	NewDuration *int `json:"newDuration,omitempty"`
 	// The ID of a worker who is locking the external task
-	WorkerId *string `json:"workerId,omitempty"`
+	WorkerID *string `json:"workerId,omitempty"`
 }
 
 // QuerySetRetriesAsync a query for SetRetriesAsync request
@@ -308,7 +308,7 @@ type QuerySetRetriesAsync struct {
 // ResBatch a JSON object corresponding to the Batch interface in the engine
 type ResBatch struct {
 	// The id of the created batch
-	Id string `json:"id"`
+	ID string `json:"id"`
 	// The type of the created batch
 	Type string `json:"type"`
 	// The total jobs of a batch is the number of batch execution jobs required to complete the batch
@@ -321,13 +321,13 @@ type ResBatch struct {
 	// migrated per batch execution job
 	InvocationsPerBatchJob int `json:"invocationsPerBatchJob"`
 	// The job definition id for the seed jobs of this batch
-	SeedJobDefinitionId string `json:"seedJobDefinitionId"`
+	SeedJobDefinitionID string `json:"seedJobDefinitionId"`
 	// The job definition id for the monitor jobs of this batch
-	MonitorJobDefinitionId string `json:"monitorJobDefinitionId"`
+	MonitorJobDefinitionID string `json:"monitorJobDefinitionId"`
 	// The job definition id for the batch execution jobs of this batch
-	BatchJobDefinitionId string `json:"batchJobDefinitionId"`
+	BatchJobDefinitionID string `json:"batchJobDefinitionId"`
 	// The tenant id of the batch
-	TenantId string `json:"tenantId"`
+	TenantID string `json:"tenantId"`
 }
 
 // QuerySetRetriesSync a query for SetRetriesSync request
@@ -358,7 +358,7 @@ func (e *ExternalTask) Get(id string) (*ResExternalTask, error) {
 		return nil, err
 	}
 
-	if err := e.client.readJsonResponse(res, resp); err != nil {
+	if err := e.client.readJSONResponse(res, resp); err != nil {
 		return nil, err
 	}
 
@@ -379,7 +379,7 @@ func (e *ExternalTask) GetList(query map[string]string) ([]*ResExternalTask, err
 		return nil, err
 	}
 
-	if err := e.client.readJsonResponse(res, resp); err != nil {
+	if err := e.client.readJSONResponse(res, resp); err != nil {
 		return nil, err
 	}
 
@@ -397,7 +397,7 @@ func (e *ExternalTask) GetListCount(query map[string]string) (int, error) {
 		return 0, err
 	}
 
-	err = e.client.readJsonResponse(res, &resCount)
+	err = e.client.readJSONResponse(res, &resCount)
 	return resCount.Count, err
 }
 
@@ -406,7 +406,7 @@ func (e *ExternalTask) GetListCount(query map[string]string) (int, error) {
 // because it allows to specify a hierarchical result sorting.
 func (e *ExternalTask) GetListPost(query QueryGetListPost, firstResult, maxResults int) ([]*ResExternalTask, error) {
 	resp := []*ResExternalTask{}
-	res, err := e.client.doPostJson(
+	res, err := e.client.doPostJSON(
 		"/external-task",
 		map[string]string{},
 		&query,
@@ -415,7 +415,7 @@ func (e *ExternalTask) GetListPost(query QueryGetListPost, firstResult, maxResul
 		return nil, err
 	}
 
-	if err := e.client.readJsonResponse(res, resp); err != nil {
+	if err := e.client.readJSONResponse(res, resp); err != nil {
 		return nil, err
 	}
 
@@ -426,7 +426,7 @@ func (e *ExternalTask) GetListPost(query QueryGetListPost, firstResult, maxResul
 // This method takes the same message body as the Get External Tasks (POST) method
 func (e *ExternalTask) GetListPostCount(query QueryGetListPost) (int, error) {
 	resCount := ResCount{}
-	res, err := e.client.doPostJson(
+	res, err := e.client.doPostJSON(
 		"/external-task/count",
 		map[string]string{},
 		query,
@@ -435,7 +435,7 @@ func (e *ExternalTask) GetListPostCount(query QueryGetListPost) (int, error) {
 		return 0, err
 	}
 
-	err = e.client.readJsonResponse(res, resCount)
+	err = e.client.readJSONResponse(res, resCount)
 	return resCount.Count, err
 }
 
@@ -443,7 +443,7 @@ func (e *ExternalTask) GetListPostCount(query QueryGetListPost) (int, error) {
 // Query can be restricted to specific task topics and for each task topic an individual lock time can be provided
 func (e *ExternalTask) FetchAndLock(query QueryFetchAndLock) ([]*ResLockedExternalTask, error) {
 	resp := []*ResLockedExternalTask{}
-	res, err := e.client.doPostJson(
+	res, err := e.client.doPostJSON(
 		"/external-task/fetchAndLock",
 		map[string]string{},
 		&query,
@@ -452,7 +452,7 @@ func (e *ExternalTask) FetchAndLock(query QueryFetchAndLock) ([]*ResLockedExtern
 		return nil, fmt.Errorf("request error: %s", err)
 	}
 
-	if err := e.client.readJsonResponse(res, &resp); err != nil {
+	if err := e.client.readJSONResponse(res, &resp); err != nil {
 		return nil, err
 	}
 
@@ -461,14 +461,14 @@ func (e *ExternalTask) FetchAndLock(query QueryFetchAndLock) ([]*ResLockedExtern
 
 // Complete a completes an external task by id and updates process variables
 func (e *ExternalTask) Complete(id string, query QueryComplete) error {
-	_, err := e.client.doPostJson("/external-task/"+id+"/complete", map[string]string{}, &query)
+	_, err := e.client.doPostJSON("/external-task/"+id+"/complete", map[string]string{}, &query)
 	return err
 }
 
 // HandleBPMNError reports a business error in the context of a running external task by id.
 // The error code must be specified to identify the BPMN error handler
 func (e *ExternalTask) HandleBPMNError(id string, query QueryHandleBPMNError) error {
-	_, err := e.client.doPostJson("/external-task/"+id+"/bpmnError", map[string]string{}, &query)
+	_, err := e.client.doPostJSON("/external-task/"+id+"/bpmnError", map[string]string{}, &query)
 	return err
 }
 
@@ -476,7 +476,7 @@ func (e *ExternalTask) HandleBPMNError(id string, query QueryHandleBPMNError) er
 // A number of retries and a timeout until the task can be retried can be specified.
 // If retries are set to 0, an incident for this task is created
 func (e *ExternalTask) HandleFailure(id string, query QueryHandleFailure) error {
-	_, err := e.client.doPostJson("/external-task/"+id+"/failure", map[string]string{}, &query)
+	_, err := e.client.doPostJSON("/external-task/"+id+"/failure", map[string]string{}, &query)
 	return err
 }
 
@@ -488,7 +488,7 @@ func (e *ExternalTask) Unlock(id string) error {
 
 // ExtendLock a extends the timeout of the lock by a given amount of time
 func (e *ExternalTask) ExtendLock(id string, query QueryExtendLock) error {
-	_, err := e.client.doPostJson("/external-task/"+id+"/extendLock", map[string]string{}, &query)
+	_, err := e.client.doPostJSON("/external-task/"+id+"/extendLock", map[string]string{}, &query)
 	return err
 }
 
@@ -501,7 +501,7 @@ func (e *ExternalTask) SetPriority(id string, priority int) error {
 // SetRetries a sets the number of retries left to execute an external task by id. If retries are set to 0,
 // an incident is created
 func (e *ExternalTask) SetRetries(id string, retries int) error {
-	_, err := e.client.doPutJson("/external-task/"+id+"/retries", map[string]string{}, map[string]int{
+	_, err := e.client.doPutJSON("/external-task/"+id+"/retries", map[string]string{}, map[string]int{
 		"retries": retries,
 	})
 	return err
@@ -512,7 +512,7 @@ func (e *ExternalTask) SetRetries(id string, retries int) error {
 // If retries are set to 0, an incident is created
 func (e *ExternalTask) SetRetriesAsync(id string, query QuerySetRetriesAsync) (*ResBatch, error) {
 	resp := ResBatch{}
-	res, err := e.client.doPostJson(
+	res, err := e.client.doPostJSON(
 		"/external-task/retries-async",
 		map[string]string{},
 		&query,
@@ -521,7 +521,7 @@ func (e *ExternalTask) SetRetriesAsync(id string, query QuerySetRetriesAsync) (*
 		return nil, err
 	}
 
-	if err := e.client.readJsonResponse(res, &resp); err != nil {
+	if err := e.client.readJSONResponse(res, &resp); err != nil {
 		return nil, err
 	}
 
@@ -532,6 +532,6 @@ func (e *ExternalTask) SetRetriesAsync(id string, query QuerySetRetriesAsync) (*
 // Sets the number of retries left to execute external tasks by id synchronously.
 // If retries are set to 0, an incident is created
 func (e *ExternalTask) SetRetriesSync(id string, query QuerySetRetriesSync) error {
-	_, err := e.client.doPutJson("/external-task/retries", map[string]string{}, &query)
+	_, err := e.client.doPutJSON("/external-task/retries", map[string]string{}, &query)
 	return err
 }

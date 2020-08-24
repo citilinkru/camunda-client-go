@@ -10,7 +10,7 @@ type ProcessDefinition struct {
 // ResProcessDefinition a JSON object corresponding to the ProcessDefinition interface in the engine
 type ResProcessDefinition struct {
 	// The id of the process definition
-	Id string `json:"id"`
+	ID string `json:"id"`
 	// The key of the process definition, i.e., the id of the BPMN 2.0 XML process definition
 	Key string `json:"key"`
 	// The category of the process definition
@@ -24,25 +24,25 @@ type ResProcessDefinition struct {
 	// The file name of the process definition
 	Resource string `json:"resource"`
 	// The deployment id of the process definition
-	DeploymentId string `json:"deploymentId"`
+	DeploymentID string `json:"deploymentId"`
 	// The file name of the process definition diagram, if it exists
 	Diagram string `json:"diagram"`
 	// A flag indicating whether the definition is suspended or not
 	Suspended bool `json:"suspended"`
 	// The tenant id of the process definition
-	TenantId string `json:"tenantId"`
+	TenantID string `json:"tenantId"`
 	// The version tag of the process definition
 	VersionTag string `json:"versionTag"`
 	// History time to live value of the process definition. Is used within History cleanup
 	HistoryTimeToLive int `json:"historyTimeToLive"`
-	// A flag indicating whether the process definition is startable in Tasklist or not
-	StartableInTasklist bool `json:"startableInTasklist"`
+	// A flag indicating whether the process definition is startable in task list or not
+	StartableInTaskList bool `json:"startableInTasklist"`
 }
 
 // ResActivityInstanceStatistics a JSON array containing statistics results per activity
 type ResActivityInstanceStatistics struct {
 	// The id of the activity the results are aggregated for
-	Id string `json:"id"`
+	ID string `json:"id"`
 	// The total number of running instances of this activity
 	Instances int `json:"instances"`
 	// Number	The total number of failed jobs for the running instances.
@@ -55,7 +55,7 @@ type ResActivityInstanceStatistics struct {
 // ResInstanceStatistics a JSON array containing statistics results per process definition
 type ResInstanceStatistics struct {
 	// The id of the activity the results are aggregated for
-	Id string `json:"id"`
+	ID string `json:"id"`
 	// The total number of running instances of this activity
 	Instances int `json:"instances"`
 	// Number	The total number of failed jobs for the running instances.
@@ -85,7 +85,7 @@ type ReqStartInstance struct {
 	// The business key uniquely identifies the process instance in the context of the given process definition
 	BusinessKey *string `json:"businessKey,omitempty"`
 	// The case instance id the process instance is to be initialized with
-	CaseInstanceId *string `json:"caseInstanceId,omitempty"`
+	CaseInstanceID *string `json:"caseInstanceId,omitempty"`
 	// Optional. A JSON array of instructions that specify which activities to start the process instance at.
 	// If this property is omitted, the process instance starts at its default blank start event
 	StartInstructions *ReqStartInstructions `json:"startInstructions,omitempty"`
@@ -133,9 +133,9 @@ type ReqStartInstructions struct {
 	Type string `json:"type"`
 	// Can be used with instructions of types startBeforeActivity and startAfterActivity.
 	// Specifies the activity the instruction targets
-	ActivityId *string `json:"activityId,omitempty"`
+	ActivityID *string `json:"activityId,omitempty"`
 	// Can be used with instructions of types startTransition. Specifies the sequence flow to start
-	TransitionId *string `json:"transitionId,omitempty"`
+	TransitionID *string `json:"transitionId,omitempty"`
 	// Can be used with instructions of type startBeforeActivity, startAfterActivity, and startTransition.
 	// A JSON object containing variable key-value pairs
 	Variables *map[string]VariableSet `json:"variables,omitempty"`
@@ -143,9 +143,9 @@ type ReqStartInstructions struct {
 
 // QueryProcessDefinitionBy path builder
 type QueryProcessDefinitionBy struct {
-	Id       *string
+	ID       *string
 	Key      *string
-	TenantId *string
+	TenantID *string
 }
 
 // ResGetStartFormKey a response from GetStartFormKey method
@@ -159,7 +159,7 @@ type ResGetStartFormKey struct {
 // ResBPMNProcessDefinition a JSON object containing the id of the definition and the BPMN 2.0 XML
 type ResBPMNProcessDefinition struct {
 	// The id of the process definition
-	Id string `json:"id"`
+	ID string `json:"id"`
 	// An escaped XML string containing the XML that this definition was deployed with.
 	// Carriage returns, line feeds and quotation marks are escaped
 	Bpmn20Xml string `json:"bpmn20Xml"`
@@ -167,27 +167,27 @@ type ResBPMNProcessDefinition struct {
 
 // String a build path part
 func (q *QueryProcessDefinitionBy) String() string {
-	if q.Key != nil && q.TenantId != nil {
-		return "key/" + *q.Key + "/tenant-id/" + *q.TenantId
+	if q.Key != nil && q.TenantID != nil {
+		return "key/" + *q.Key + "/tenant-id/" + *q.TenantID
 	} else if q.Key != nil {
 		return "key/" + *q.Key
 	}
 
-	return *q.Id
+	return *q.ID
 }
 
 // ResStartedProcessDefinition ProcessDefinition for started
 type ResStartedProcessDefinition struct {
 	// The id of the process definition
-	Id string `json:"id"`
+	ID string `json:"id"`
 	// The id of the process definition
-	DefinitionId string `json:"definitionId"`
+	DefinitionID string `json:"definitionId"`
 	// The business key of the process instance
 	BusinessKey string `json:"businessKey"`
 	// The case instance id of the process instance
-	CaseInstanceId string `json:"caseInstanceId"`
+	CaseInstanceID string `json:"caseInstanceId"`
 	// The tenant id of the process instance
-	TenantId string `json:"tenantId"`
+	TenantID string `json:"tenantId"`
 	// A flag indicating whether the instance is still running or not
 	Ended bool `json:"ended"`
 	// A flag indicating whether the instance is suspended or not
@@ -208,18 +208,18 @@ type ReqSubmitStartForm struct {
 	BusinessKey string `json:"businessKey"`
 }
 
-// ReqSubmitStartForm response rrom SubmitStartForm method
+// ResSubmitStartForm response from SubmitStartForm method
 type ResSubmitStartForm struct {
 	Links        []ResLink `json:"links"`
-	Id           string    `json:"id"`
-	DefinitionId string    `json:"definitionId"`
+	ID           string    `json:"id"`
+	DefinitionID string    `json:"definitionId"`
 	BusinessKey  string    `json:"businessKey"`
 	Ended        bool      `json:"ended"`
 	Suspended    bool      `json:"suspended"`
 }
 
-// ReqActivateOrSuspendById response ActivateOrSuspendById
-type ReqActivateOrSuspendById struct {
+// ReqActivateOrSuspendByID response ActivateOrSuspendByID
+type ReqActivateOrSuspendByID struct {
 	// A Boolean value which indicates whether to activate or suspend a given process definition. When the value
 	// is set to true, the given process definition will be suspended and when the value is set to false,
 	// the given process definition will be activated
@@ -265,7 +265,7 @@ func (p *ProcessDefinition) GetActivityInstanceStatistics(by QueryProcessDefinit
 		return
 	}
 
-	err = p.client.readJsonResponse(res, &statistic)
+	err = p.client.readJSONResponse(res, &statistic)
 	return
 }
 
@@ -294,7 +294,7 @@ func (p *ProcessDefinition) GetStartFormVariables(by QueryProcessDefinitionBy, q
 		return
 	}
 
-	err = p.client.readJsonResponse(res, &variables)
+	err = p.client.readJSONResponse(res, &variables)
 	return
 }
 
@@ -308,7 +308,7 @@ func (p *ProcessDefinition) GetListCount(query map[string]string) (count int, er
 		return
 	}
 
-	err = p.client.readJsonResponse(res, &resCount)
+	err = p.client.readJSONResponse(res, &resCount)
 	return resCount.Count, err
 }
 
@@ -322,7 +322,7 @@ func (p *ProcessDefinition) GetList(query map[string]string) (processDefinitions
 		return
 	}
 
-	err = p.client.readJsonResponse(res, &processDefinitions)
+	err = p.client.readJSONResponse(res, &processDefinitions)
 	return
 }
 
@@ -352,7 +352,7 @@ func (p *ProcessDefinition) GetStartFormKey(by QueryProcessDefinitionBy) (resp *
 		return
 	}
 
-	err = p.client.readJsonResponse(res, &resp)
+	err = p.client.readJSONResponse(res, &resp)
 	return
 }
 
@@ -366,7 +366,7 @@ func (p *ProcessDefinition) GetProcessInstanceStatistics(query map[string]string
 		return
 	}
 
-	err = p.client.readJsonResponse(res, &statistic)
+	err = p.client.readJSONResponse(res, &statistic)
 	return
 }
 
@@ -378,7 +378,7 @@ func (p *ProcessDefinition) GetXML(by QueryProcessDefinitionBy) (resp *ResBPMNPr
 		return
 	}
 
-	err = p.client.readJsonResponse(res, &resp)
+	err = p.client.readJSONResponse(res, &resp)
 	return
 }
 
@@ -390,7 +390,7 @@ func (p *ProcessDefinition) Get(by QueryProcessDefinitionBy) (processDefinition 
 		return
 	}
 
-	err = p.client.readJsonResponse(res, &processDefinition)
+	err = p.client.readJSONResponse(res, &processDefinition)
 	return
 }
 
@@ -398,12 +398,12 @@ func (p *ProcessDefinition) Get(by QueryProcessDefinitionBy) (processDefinition 
 // in the request body
 func (p *ProcessDefinition) StartInstance(by QueryProcessDefinitionBy, req ReqStartInstance) (processDefinition *ResStartedProcessDefinition, err error) {
 	processDefinition = &ResStartedProcessDefinition{}
-	res, err := p.client.doPostJson("/process-definition/"+by.String()+"/start", map[string]string{}, &req)
+	res, err := p.client.doPostJSON("/process-definition/"+by.String()+"/start", map[string]string{}, &req)
 	if err != nil {
 		return
 	}
 
-	err = p.client.readJsonResponse(res, processDefinition)
+	err = p.client.readJSONResponse(res, processDefinition)
 	return
 }
 
@@ -412,32 +412,32 @@ func (p *ProcessDefinition) StartInstance(by QueryProcessDefinitionBy, req ReqSt
 // fields which have validators defined. See Documentation on Generated Task Forms
 func (p *ProcessDefinition) SubmitStartForm(by QueryProcessDefinitionBy, req ReqSubmitStartForm) (reps *ResSubmitStartForm, err error) {
 	reps = &ResSubmitStartForm{}
-	res, err := p.client.doPostJson("/process-definition/"+by.String()+"/submit-form", map[string]string{}, &req)
+	res, err := p.client.doPostJSON("/process-definition/"+by.String()+"/submit-form", map[string]string{}, &req)
 	if err != nil {
 		return
 	}
 
-	err = p.client.readJsonResponse(res, reps)
+	err = p.client.readJSONResponse(res, reps)
 	return
 }
 
-// ActivateOrSuspendById activates or suspends a given process definition by id or by latest version
+// ActivateOrSuspendByID activates or suspends a given process definition by id or by latest version
 // of process definition key
-func (p *ProcessDefinition) ActivateOrSuspendById(by QueryProcessDefinitionBy, req ReqActivateOrSuspendById) error {
-	_, err := p.client.doPutJson("/process-definition/"+by.String()+"/suspended", map[string]string{}, &req)
+func (p *ProcessDefinition) ActivateOrSuspendByID(by QueryProcessDefinitionBy, req ReqActivateOrSuspendByID) error {
+	_, err := p.client.doPutJSON("/process-definition/"+by.String()+"/suspended", map[string]string{}, &req)
 	return err
 }
 
 // ActivateOrSuspendByKey activates or suspends process definitions with the given process definition key
 func (p *ProcessDefinition) ActivateOrSuspendByKey(req ReqActivateOrSuspendByKey) error {
-	_, err := p.client.doPutJson("/process-definition/suspended", map[string]string{}, &req)
+	_, err := p.client.doPutJSON("/process-definition/suspended", map[string]string{}, &req)
 	return err
 }
 
 // UpdateHistoryTimeToLive updates history time to live for process definition.
 // The field is used within History cleanup
 func (p *ProcessDefinition) UpdateHistoryTimeToLive(by QueryProcessDefinitionBy, historyTimeToLive int) error {
-	_, err := p.client.doPutJson("/process-definition/"+by.String()+"/history-time-to-live", map[string]string{}, &map[string]int{"historyTimeToLive": historyTimeToLive})
+	_, err := p.client.doPutJSON("/process-definition/"+by.String()+"/history-time-to-live", map[string]string{}, &map[string]int{"historyTimeToLive": historyTimeToLive})
 	return err
 }
 
@@ -469,7 +469,7 @@ func (p *ProcessDefinition) GetDeployedStartForm(by QueryProcessDefinitionBy) (h
 // For more information about the difference between synchronous and asynchronous execution,
 // please refer to the related section of the user guide
 func (p *ProcessDefinition) RestartProcessInstance(id string, req ReqRestartInstance) error {
-	_, err := p.client.doPostJson("/process-definition/"+id+"/restart", map[string]string{}, &req)
+	_, err := p.client.doPostJSON("/process-definition/"+id+"/restart", map[string]string{}, &req)
 	return err
 }
 
@@ -479,11 +479,11 @@ func (p *ProcessDefinition) RestartProcessInstance(id string, req ReqRestartInst
 // please refer to the related section of the user guide
 func (p *ProcessDefinition) RestartProcessInstanceAsync(id string, req ReqRestartInstance) (resp *ResBatch, err error) {
 	resp = &ResBatch{}
-	res, err := p.client.doPostJson("/process-definition/"+id+"/restart-async", map[string]string{}, &req)
+	res, err := p.client.doPostJSON("/process-definition/"+id+"/restart-async", map[string]string{}, &req)
 	if err != nil {
 		return
 	}
 
-	err = p.client.readJsonResponse(res, resp)
+	err = p.client.readJSONResponse(res, resp)
 	return
 }

@@ -20,7 +20,7 @@ type Processor struct {
 // Options options for Processor
 type Options struct {
 	// workerId for all request (default: `worker-{random_int}`)
-	WorkerId string
+	WorkerID string
 	// lock duration for all external task
 	LockDuration time.Duration
 	// maximum tasks to receive for 1 request to camunda
@@ -39,8 +39,8 @@ type Options struct {
 
 // NewProcessor a create new instance Processor
 func NewProcessor(client *camundaClient.Client, options *Options, logger func(err error)) *Processor {
-	if options.WorkerId == "" {
-		options.WorkerId = fmt.Sprintf("worker-%d", rand.Int())
+	if options.WorkerID == "" {
+		options.WorkerID = fmt.Sprintf("worker-%d", rand.Int())
 	}
 
 	return &Processor{
@@ -110,7 +110,7 @@ func (p *Processor) AddHandler(topics *[]camundaClient.QueryFetchAndLockTopic, h
 	}
 
 	go p.startPuller(camundaClient.QueryFetchAndLock{
-		WorkerId:             p.options.WorkerId,
+		WorkerId:             p.options.WorkerID,
 		MaxTasks:             p.options.MaxTasks,
 		UsePriority:          p.options.UsePriority,
 		AsyncResponseTimeout: asyncResponseTimeout,
@@ -136,7 +136,7 @@ func (p *Processor) startPuller(query camundaClient.QueryFetchAndLock, handler H
 		tasks, err := p.client.ExternalTask.FetchAndLock(query)
 		if err != nil {
 			if retries < 60 {
-				retries += 1
+				retries++
 			}
 			p.logger(fmt.Errorf("failed pull: %s, sleeping: %d seconds", err, retries))
 			time.Sleep(time.Duration(retries) * time.Second)

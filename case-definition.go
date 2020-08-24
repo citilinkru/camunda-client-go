@@ -3,7 +3,7 @@ package camundaclient
 // ResCaseDefinition a JSON object corresponding to the CaseDefinition interface in the engine
 type ResCaseDefinition struct {
 	// The id of the case definition
-	Id string `json:"id"`
+	ID string `json:"id"`
 	// The key of the case definition, i.e., the id of the CMMN 2.0 XML case definition
 	Key string `json:"key"`
 	// The category of the case definition
@@ -15,9 +15,9 @@ type ResCaseDefinition struct {
 	// The file name of the case definition
 	Resource string `json:"resource"`
 	// The deployment id of the case definition
-	DeploymentId string `json:"deploymentId"`
+	DeploymentID string `json:"deploymentId"`
 	// The tenant id of the case definition
-	TenantId string `json:"tenantId"`
+	TenantID string `json:"tenantId"`
 	// History time to live value of the case definition. Is used within History cleanup
 	HistoryTimeToLive int `json:"historyTimeToLive"`
 }
