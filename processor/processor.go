@@ -7,18 +7,18 @@ import (
 	"runtime/debug"
 	"time"
 
-	camunda_client_go "github.com/citilinkru/camunda-client-go"
+	camundaClient "github.com/citilinkru/camunda-client-go"
 )
 
 // Processor external task processor
 type Processor struct {
-	client  *camunda_client_go.Client
-	options *ProcessorOptions
+	client  *camundaClient.Client
+	options *Options
 	logger  func(err error)
 }
 
-// ProcessorOptions options for Processor
-type ProcessorOptions struct {
+// Options options for Processor
+type Options struct {
 	// workerId for all request (default: `worker-{random_int}`)
 	WorkerId string
 	// lock duration for all external task
@@ -38,7 +38,7 @@ type ProcessorOptions struct {
 }
 
 // NewProcessor a create new instance Processor
-func NewProcessor(client *camunda_client_go.Client, options *ProcessorOptions, logger func(err error)) *Processor {
+func NewProcessor(client *camundaClient.Client, options *Options, logger func(err error)) *Processor {
 	if options.WorkerId == "" {
 		options.WorkerId = fmt.Sprintf("worker-%d", rand.Int())
 	}
@@ -55,13 +55,13 @@ type Handler func(ctx *Context) error
 
 // Context external task context
 type Context struct {
-	Task   *camunda_client_go.ResLockedExternalTask
-	client *camunda_client_go.Client
+	Task   *camundaClient.ResLockedExternalTask
+	client *camundaClient.Client
 }
 
 // Complete a mark external task is complete
 func (c *Context) Complete(query QueryComplete) error {
-	return c.client.ExternalTask.Complete(c.Task.Id, camunda_client_go.QueryComplete{
+	return c.client.ExternalTask.Complete(c.Task.Id, camundaClient.QueryComplete{
 		WorkerId:       &c.Task.WorkerId,
 		Variables:      query.Variables,
 		LocalVariables: query.LocalVariables,
@@ -70,7 +70,7 @@ func (c *Context) Complete(query QueryComplete) error {
 
 // HandleBPMNError handle external task BPMN error
 func (c *Context) HandleBPMNError(query QueryHandleBPMNError) error {
-	return c.client.ExternalTask.HandleBPMNError(c.Task.Id, camunda_client_go.QueryHandleBPMNError{
+	return c.client.ExternalTask.HandleBPMNError(c.Task.Id, camundaClient.QueryHandleBPMNError{
 		WorkerId:     &c.Task.WorkerId,
 		ErrorCode:    query.ErrorCode,
 		ErrorMessage: query.ErrorMessage,
@@ -80,7 +80,7 @@ func (c *Context) HandleBPMNError(query QueryHandleBPMNError) error {
 
 // HandleFailure handle external task failure
 func (c *Context) HandleFailure(query QueryHandleFailure) error {
-	return c.client.ExternalTask.HandleFailure(c.Task.Id, camunda_client_go.QueryHandleFailure{
+	return c.client.ExternalTask.HandleFailure(c.Task.Id, camundaClient.QueryHandleFailure{
 		WorkerId:     &c.Task.WorkerId,
 		ErrorMessage: query.ErrorMessage,
 		ErrorDetails: query.ErrorDetails,
@@ -90,7 +90,7 @@ func (c *Context) HandleFailure(query QueryHandleFailure) error {
 }
 
 // AddHandler a add handler for external task
-func (p *Processor) AddHandler(topics *[]camunda_client_go.QueryFetchAndLockTopic, handler Handler) {
+func (p *Processor) AddHandler(topics *[]camundaClient.QueryFetchAndLockTopic, handler Handler) {
 	if topics != nil && p.options.LockDuration != 0 {
 		for i := range *topics {
 			v := &(*topics)[i]
@@ -109,7 +109,7 @@ func (p *Processor) AddHandler(topics *[]camunda_client_go.QueryFetchAndLockTopi
 		asyncResponseTimeout = &msValue
 	}
 
-	go p.startPuller(camunda_client_go.QueryFetchAndLock{
+	go p.startPuller(camundaClient.QueryFetchAndLock{
 		WorkerId:             p.options.WorkerId,
 		MaxTasks:             p.options.MaxTasks,
 		UsePriority:          p.options.UsePriority,
@@ -118,8 +118,8 @@ func (p *Processor) AddHandler(topics *[]camunda_client_go.QueryFetchAndLockTopi
 	}, handler)
 }
 
-func (p *Processor) startPuller(query camunda_client_go.QueryFetchAndLock, handler Handler) {
-	var tasksChan = make(chan *camunda_client_go.ResLockedExternalTask)
+func (p *Processor) startPuller(query camundaClient.QueryFetchAndLock, handler Handler) {
+	var tasksChan = make(chan *camundaClient.ResLockedExternalTask)
 
 	maxParallelTaskPerHandler := p.options.MaxParallelTaskPerHandler
 	if maxParallelTaskPerHandler < 1 {
@@ -150,7 +150,7 @@ func (p *Processor) startPuller(query camunda_client_go.QueryFetchAndLock, handl
 	}
 }
 
-func (p *Processor) runWorker(handler Handler, tasksChan chan *camunda_client_go.ResLockedExternalTask) {
+func (p *Processor) runWorker(handler Handler, tasksChan chan *camundaClient.ResLockedExternalTask) {
 	for task := range tasksChan {
 		p.handle(&Context{
 			Task:   task,

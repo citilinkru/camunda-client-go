@@ -1,4 +1,4 @@
-package camunda_client_go
+package camundaclient
 
 import (
 	"fmt"

@@ -1,4 +1,4 @@
-package camunda_client_go
+package camundaclient
 
 // ResCount a count response
 type ResCount struct {

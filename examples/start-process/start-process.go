@@ -2,12 +2,12 @@ package main
 
 import (
 	"fmt"
-	camunda_client_go "github.com/citilinkru/camunda-client-go"
+	camundaClient "github.com/citilinkru/camunda-client-go"
 	"time"
 )
 
 func main() {
-	client := camunda_client_go.NewClient(camunda_client_go.ClientOptions{
+	client := camundaClient.NewClient(camundaClient.ClientOptions{
 		EndpointUrl: "http://localhost:8080/engine-rest",
 		ApiUser:     "demo",
 		ApiPassword: "demo",
@@ -22,12 +22,12 @@ func main() {
 		if n%2 == 0 {
 			isWorld = "true"
 		}
-		variables := map[string]camunda_client_go.Variable{
+		variables := map[string]camundaClient.Variable{
 			"isWorld": {Value: isWorld, Type: "boolean"},
 		}
 		result, err := client.ProcessDefinition.StartInstance(
-			camunda_client_go.QueryProcessDefinitionBy{Key: &processKey},
-			camunda_client_go.ReqStartInstance{Variables: &variables},
+			camundaClient.QueryProcessDefinitionBy{Key: &processKey},
+			camundaClient.ReqStartInstance{Variables: &variables},
 		)
 		if err != nil {
 			fmt.Printf("Error start process: %s\n", err)

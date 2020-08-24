@@ -1,4 +1,4 @@
-package camunda_client_go
+package camundaclient
 
 // ResDecisionDefinition a JSON object corresponding to the DecisionDefinition interface in the engine
 type ResDecisionDefinition struct {

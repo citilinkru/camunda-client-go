@@ -2,13 +2,13 @@ package main
 
 import (
 	"fmt"
-	camunda_client_go "github.com/citilinkru/camunda-client-go"
+	camundaClient "github.com/citilinkru/camunda-client-go"
 	"os"
 	"time"
 )
 
 func main() {
-	client := camunda_client_go.NewClient(camunda_client_go.ClientOptions{
+	client := camundaClient.NewClient(camundaClient.ClientOptions{
 		EndpointUrl: "http://localhost:8080/engine-rest",
 		ApiUser:     "demo",
 		ApiPassword: "demo",
@@ -20,7 +20,7 @@ func main() {
 		fmt.Printf("Error read file: %s\n", err)
 		return
 	}
-	result, err := client.Deployment.Create(camunda_client_go.ReqDeploymentCreate{
+	result, err := client.Deployment.Create(camundaClient.ReqDeploymentCreate{
 		DeploymentName: "HelloWorldProcessDemo",
 		Resources: map[string]interface{}{
 			"HelloWorld.bpmn": file,

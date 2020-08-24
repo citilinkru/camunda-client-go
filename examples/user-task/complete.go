@@ -2,20 +2,20 @@ package main
 
 import (
 	"fmt"
-	camunda_client_go "github.com/citilinkru/camunda-client-go"
+	camundaClient "github.com/citilinkru/camunda-client-go"
 	"os"
 	"time"
 )
 
 func main() {
-	client := camunda_client_go.NewClient(camunda_client_go.ClientOptions{
+	client := camundaClient.NewClient(camundaClient.ClientOptions{
 		EndpointUrl: "http://localhost:8080/engine-rest",
 		ApiUser:     "demo",
 		ApiPassword: "demo",
 		Timeout:     time.Second * 10,
 	})
 
-	query := camunda_client_go.UserTaskGetListQuery{
+	query := camundaClient.UserTaskGetListQuery{
 		CreatedAfter: time.Now().Add(-500 * time.Hour),
 	}
 
@@ -36,7 +36,7 @@ func main() {
 	for i, taks := range tasks {
 		fmt.Printf("%02d. UserTask: %s - %s - ", i+1, taks.Id, taks.Name)
 
-		err = taks.Complete(camunda_client_go.QueryUserTaskComplete{})
+		err = taks.Complete(camundaClient.QueryUserTaskComplete{})
 		if err != nil {
 			fmt.Printf("ERROR: %s", err)
 		} else {

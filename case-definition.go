@@ -1,4 +1,4 @@
-package camunda_client_go
+package camundaclient
 
 // ResCaseDefinition a JSON object corresponding to the CaseDefinition interface in the engine
 type ResCaseDefinition struct {

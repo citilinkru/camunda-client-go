@@ -1,4 +1,4 @@
-package camunda_client_go
+package camundaclient
 
 // ResDecisionRequirementsDefinition a JSON object corresponding to the DecisionRequirementsDefinition
 // interface in the engine
