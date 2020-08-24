@@ -2,8 +2,8 @@ package main
 
 import (
 	"fmt"
-	camundaClient "github.com/citilinkru/camunda-client-go"
-	"github.com/citilinkru/camunda-client-go/processor"
+	camundaClient "github.com/fundingasiagroup/camunda-client-go"
+	"github.com/fundingasiagroup/camunda-client-go/processor"
 	"time"
 )
 

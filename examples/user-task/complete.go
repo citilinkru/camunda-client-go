@@ -2,7 +2,7 @@ package main
 
 import (
 	"fmt"
-	camundaClient "github.com/citilinkru/camunda-client-go"
+	camundaClient "github.com/fundingasiagroup/camunda-client-go"
 	"os"
 	"time"
 )
