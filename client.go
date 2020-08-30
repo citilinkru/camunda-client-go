@@ -136,18 +136,14 @@ func (c *Client) doPostJson(path string, query map[string]string, v interface{})
 	return res, nil
 }
 
-func (c *Client) doPutJson(path string, query map[string]string, v interface{}) (res *http.Response, err error) {
+func (c *Client) doPutJson(path string, query map[string]string, v interface{}) error {
 	body := new(bytes.Buffer)
 	if err := json.NewEncoder(body).Encode(v); err != nil {
-		return nil, err
+		return err
 	}
 
-	res, err = c.do(http.MethodPut, path, query, body, "application/json")
-	if err != nil {
-		return nil, err
-	}
-
-	return res, nil
+	_, err := c.do(http.MethodPut, path, query, body, "application/json")
+	return err
 }
 
 func (c *Client) doDelete(path string, query map[string]string) (res *http.Response, err error) {
@@ -209,7 +205,7 @@ func (c *Client) checkResponse(res *http.Response) error {
 		jsonErr := &Error{}
 		err := json.NewDecoder(res.Body).Decode(jsonErr)
 		if err != nil {
-			return fmt.Errorf("response error with status code %d: failed unmarshal error response: %s", res.StatusCode, err)
+			return fmt.Errorf("response error with status code %d: failed unmarshal error response: %w", res.StatusCode, err)
 		}
 
 		return jsonErr

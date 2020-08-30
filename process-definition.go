@@ -424,21 +424,18 @@ func (p *ProcessDefinition) SubmitStartForm(by QueryProcessDefinitionBy, req Req
 // ActivateOrSuspendById activates or suspends a given process definition by id or by latest version
 // of process definition key
 func (p *ProcessDefinition) ActivateOrSuspendById(by QueryProcessDefinitionBy, req ReqActivateOrSuspendById) error {
-	_, err := p.client.doPutJson("/process-definition/"+by.String()+"/suspended", map[string]string{}, &req)
-	return err
+	return p.client.doPutJson("/process-definition/"+by.String()+"/suspended", map[string]string{}, &req)
 }
 
 // ActivateOrSuspendByKey activates or suspends process definitions with the given process definition key
 func (p *ProcessDefinition) ActivateOrSuspendByKey(req ReqActivateOrSuspendByKey) error {
-	_, err := p.client.doPutJson("/process-definition/suspended", map[string]string{}, &req)
-	return err
+	return p.client.doPutJson("/process-definition/suspended", map[string]string{}, &req)
 }
 
 // UpdateHistoryTimeToLive updates history time to live for process definition.
 // The field is used within History cleanup
 func (p *ProcessDefinition) UpdateHistoryTimeToLive(by QueryProcessDefinitionBy, historyTimeToLive int) error {
-	_, err := p.client.doPutJson("/process-definition/"+by.String()+"/history-time-to-live", map[string]string{}, &map[string]int{"historyTimeToLive": historyTimeToLive})
-	return err
+	return p.client.doPutJson("/process-definition/"+by.String()+"/history-time-to-live", map[string]string{}, &map[string]int{"historyTimeToLive": historyTimeToLive})
 }
 
 // Delete deletes a process definition from a deployment by id
