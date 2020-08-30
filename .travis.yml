@@ -2,15 +2,15 @@ sudo: false
 language: go
 
 go:
-  - 1.11.x
-  - 1.12.x
+  - 1.14.x
+  - 1.15.x
 
 git:
   depth: 1
 
 before_script:
-  - curl -sfL https://install.goreleaser.com/github.com/golangci/golangci-lint.sh | sh -s -- -b $(go env GOPATH)/bin v1.16.0
+  - curl -sfL https://install.goreleaser.com/github.com/golangci/golangci-lint.sh | sh -s -- -b $(go env GOPATH)/bin v1.27.0
 
 script:
-  - golangci-lint run
+  - golangci-lint run --modules-download-mode=vendor --deadline=5m
   - go test -v -race ./...

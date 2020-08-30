@@ -442,14 +442,14 @@ func (e *ExternalTask) GetListPostCount(query QueryGetListPost) (int, error) {
 // FetchAndLock fetches and locks a specific number of external tasks for execution by a worker.
 // Query can be restricted to specific task topics and for each task topic an individual lock time can be provided
 func (e *ExternalTask) FetchAndLock(query QueryFetchAndLock) ([]*ResLockedExternalTask, error) {
-	resp := []*ResLockedExternalTask{}
+	var resp []*ResLockedExternalTask
 	res, err := e.client.doPostJson(
 		"/external-task/fetchAndLock",
 		map[string]string{},
 		&query,
 	)
 	if err != nil {
-		return nil, fmt.Errorf("request error: %s", err)
+		return nil, fmt.Errorf("request error: %w", err)
 	}
 
 	if err := e.client.readJsonResponse(res, &resp); err != nil {
@@ -501,10 +501,9 @@ func (e *ExternalTask) SetPriority(id string, priority int) error {
 // SetRetries a sets the number of retries left to execute an external task by id. If retries are set to 0,
 // an incident is created
 func (e *ExternalTask) SetRetries(id string, retries int) error {
-	_, err := e.client.doPutJson("/external-task/"+id+"/retries", map[string]string{}, map[string]int{
+	return e.client.doPutJson("/external-task/"+id+"/retries", map[string]string{}, map[string]int{
 		"retries": retries,
 	})
-	return err
 }
 
 // SetRetriesAsync a set Retries For Multiple External Tasks Async (Batch).
@@ -532,6 +531,5 @@ func (e *ExternalTask) SetRetriesAsync(id string, query QuerySetRetriesAsync) (*
 // Sets the number of retries left to execute external tasks by id synchronously.
 // If retries are set to 0, an incident is created
 func (e *ExternalTask) SetRetriesSync(id string, query QuerySetRetriesSync) error {
-	_, err := e.client.doPutJson("/external-task/retries", map[string]string{}, &query)
-	return err
+	return e.client.doPutJson("/external-task/retries", map[string]string{}, &query)
 }

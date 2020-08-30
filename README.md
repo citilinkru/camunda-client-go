@@ -3,12 +3,6 @@
 
 Installation
 -----------
-latest stable version:
-
-	go get gopkg.in/citilinkru/camunda-client-go.v1
-
-latest unstable version (master branch):
-
 	go get github.com/citilinkru/camunda-client-go
 	
 Usage
@@ -136,8 +130,19 @@ go test -v -race ./...
 
 Run linter:
 ```bash
-golangci-lint run
+docker run --rm -v $(pwd):/app -w /app golangci/golangci-lint:v1.27.0 golangci-lint run -v
 ```
+
+Integration tests:
+Go to [examples directory](examples/README.md) and follow the instructions to run the examples.
+
+CONTRIBUTE
+-----------
+ * write code
+ * run `go fmt ./...`
+ * run all linters and tests (see above)
+ * run all examples (see above)
+ * create a PR describing the changes
 
 LICENSE
 -----------

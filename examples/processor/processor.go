@@ -2,13 +2,13 @@ package main
 
 import (
 	"fmt"
-	camunda_client_go "github.com/citilinkru/camunda-client-go"
+	camundaclientgo "github.com/citilinkru/camunda-client-go"
 	"github.com/citilinkru/camunda-client-go/processor"
 	"time"
 )
 
 func main() {
-	client := camunda_client_go.NewClient(camunda_client_go.ClientOptions{
+	client := camundaclientgo.NewClient(camundaclientgo.ClientOptions{
 		EndpointUrl: "http://localhost:8080/engine-rest",
 		ApiUser:     "demo",
 		ApiPassword: "demo",
@@ -27,7 +27,7 @@ func main() {
 	}, logger)
 
 	proc.AddHandler(
-		&[]camunda_client_go.QueryFetchAndLockTopic{
+		&[]camundaclientgo.QueryFetchAndLockTopic{
 			{TopicName: "PrintHello"},
 		},
 		func(ctx *processor.Context) error {
@@ -37,7 +37,7 @@ func main() {
 			fmt.Println("Hello")
 
 			err := ctx.Complete(processor.QueryComplete{
-				Variables: &map[string]camunda_client_go.Variable{
+				Variables: &map[string]camundaclientgo.Variable{
 					"status": {Value: "true", Type: "boolean"},
 				},
 			})
@@ -51,7 +51,7 @@ func main() {
 	)
 
 	proc.AddHandler(
-		&[]camunda_client_go.QueryFetchAndLockTopic{
+		&[]camundaclientgo.QueryFetchAndLockTopic{
 			{TopicName: "PrintWorld"},
 		},
 		func(ctx *processor.Context) error {
@@ -61,7 +61,7 @@ func main() {
 			fmt.Println("World")
 
 			err := ctx.Complete(processor.QueryComplete{
-				Variables: &map[string]camunda_client_go.Variable{
+				Variables: &map[string]camundaclientgo.Variable{
 					"status": {Value: "true", Type: "boolean"},
 				},
 			})

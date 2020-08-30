@@ -1,0 +1,11 @@
+run:
+  skip-files:
+    -*_test.go
+linters:
+  enable:
+    - prealloc
+    - dogsled
+    - scopelint
+    - unconvert
+    - unparam
+    - whitespace

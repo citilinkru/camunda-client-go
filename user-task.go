@@ -68,7 +68,7 @@ type UserTask struct {
 func (t *UserTask) Complete(query QueryUserTaskComplete) error {
 	err := t.api.Complete(t.Id, query)
 	if err != nil {
-		return fmt.Errorf("can't complete task: %s", err)
+		return fmt.Errorf("can't complete task: %w", err)
 	}
 
 	return nil
@@ -359,7 +359,7 @@ func (t *userTaskApi) Get(id string) (*UserTask, error) {
 
 	resp := UserTaskResponse{}
 	if err := t.client.readJsonResponse(res, &resp); err != nil {
-		return nil, fmt.Errorf("can't read json response: %s", err)
+		return nil, fmt.Errorf("can't read json response: %w", err)
 	}
 
 	return &UserTask{
@@ -389,9 +389,9 @@ func (t *userTaskApi) GetList(query *UserTaskGetListQuery) ([]UserTask, error) {
 		return nil, err
 	}
 
-	resp := []UserTask{}
+	var resp []UserTask
 	if err := t.client.readJsonResponse(res, &resp); err != nil {
-		return nil, fmt.Errorf("can't read json response: %s", err)
+		return nil, fmt.Errorf("can't read json response: %w", err)
 	}
 
 	for i := range resp {
@@ -419,7 +419,7 @@ func (t *userTaskApi) GetListCount(query *UserTaskGetListQuery) (int64, error) {
 	}{}
 
 	if err := t.client.readJsonResponse(res, &resp); err != nil {
-		return 0, fmt.Errorf("can't read json response: %s", err)
+		return 0, fmt.Errorf("can't read json response: %w", err)
 	}
 
 	return resp.Count, nil
@@ -429,7 +429,7 @@ func (t *userTaskApi) GetListCount(query *UserTaskGetListQuery) (int64, error) {
 func (t *userTaskApi) Complete(id string, query QueryUserTaskComplete) error {
 	_, err := t.client.doPostJson("/task/"+id+"/complete", map[string]string{}, query)
 	if err != nil {
-		return fmt.Errorf("can't post json: %s", err)
+		return fmt.Errorf("can't post json: %w", err)
 	}
 
 	return nil
