@@ -39,6 +39,7 @@ type Client struct {
 	Deployment        *Deployment
 	ProcessDefinition *ProcessDefinition
 	UserTask          *userTaskApi
+	Message           *Message
 }
 
 var ErrorNotFound = &Error{
@@ -111,6 +112,7 @@ func NewClient(options ClientOptions) *Client {
 	client.Deployment = &Deployment{client: client}
 	client.ProcessDefinition = &ProcessDefinition{client: client}
 	client.UserTask = &userTaskApi{client: client}
+	client.Message = &Message{client: client}
 
 	return client
 }
