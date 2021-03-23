@@ -3,7 +3,7 @@
 
 Installation
 -----------
-	go get github.com/citilinkru/camunda-client-go
+	go get github.com/citilinkru/camunda-client-go/v2
 	
 Usage
 -----------
