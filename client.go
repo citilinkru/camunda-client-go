@@ -40,6 +40,7 @@ type Client struct {
 	ProcessDefinition *ProcessDefinition
 	UserTask          *userTaskApi
 	Message           *Message
+	History           *History
 }
 
 var ErrorNotFound = &Error{
@@ -113,6 +114,7 @@ func NewClient(options ClientOptions) *Client {
 	client.ProcessDefinition = &ProcessDefinition{client: client}
 	client.UserTask = &userTaskApi{client: client}
 	client.Message = &Message{client: client}
+	client.History = &History{client: client}
 
 	return client
 }
