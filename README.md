@@ -113,6 +113,7 @@ Features
 * Full support API `External Task`
 * Full support API `Process Definition`
 * Full support API `Deployment`
+* Partial support API `History`
 * Without external dependencies
 
 Road map

@@ -61,9 +61,9 @@ type ResHistoryProcessInstance struct {
 
 // GetProcessInstance Retrieves a historic process instance by id, according to the HistoricProcessInstance interface in the engine.
 // https://docs.camunda.org/manual/latest/reference/rest/history/process-instance/get-process-instance/
-func (h *History) GetProcessInstance(by QueryHistoryProcessInstanceBy, query map[string]string) (processInstance *ResHistoryProcessInstance, err error) {
+func (h *History) GetProcessInstance(by *QueryHistoryProcessInstanceBy) (processInstance *ResHistoryProcessInstance, err error) {
 	processInstance = &ResHistoryProcessInstance{}
-	res, err := h.client.doGet("/history/process-instance/"+by.String(), query)
+	res, err := h.client.doGet("/history/process-instance/"+by.String(), map[string]string{})
 	if err != nil {
 		return
 	}

@@ -23,9 +23,20 @@ go build
 ./processor
 ```
 
-## Start 1000 process
+### Start 1000 process
 ```bash
 cd start-process
 go build
 ./start-process
+ ```
+
+### Show process history from history
+1. Open http://127.0.0.1:8080/camunda/
+2. Login demo/demo
+3. Find and copy Process Instance ID
+
+```bash
+cd history
+go build
+./history --id={Process_Instance_ID}
  ```
