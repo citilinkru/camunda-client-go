@@ -305,31 +305,6 @@ type QuerySetRetriesAsync struct {
 	HistoricProcessInstanceQuery *string `json:"historicProcessInstanceQuery,omitempty"`
 }
 
-// ResBatch a JSON object corresponding to the Batch interface in the engine
-type ResBatch struct {
-	// The id of the created batch
-	Id string `json:"id"`
-	// The type of the created batch
-	Type string `json:"type"`
-	// The total jobs of a batch is the number of batch execution jobs required to complete the batch
-	TotalJobs int `json:"totalJobs"`
-	// The number of batch execution jobs created per seed job invocation. The batch seed job is invoked until
-	// it has created all batch execution jobs required by the batch (see totalJobs property)
-	BatchJobsPerSeed int `json:"batchJobsPerSeed"`
-	// Every batch execution job invokes the command executed by the batch invocationsPerBatchJob times.
-	// E.g., for a process instance migration batch this specifies the number of process instances which are
-	// migrated per batch execution job
-	InvocationsPerBatchJob int `json:"invocationsPerBatchJob"`
-	// The job definition id for the seed jobs of this batch
-	SeedJobDefinitionId string `json:"seedJobDefinitionId"`
-	// The job definition id for the monitor jobs of this batch
-	MonitorJobDefinitionId string `json:"monitorJobDefinitionId"`
-	// The job definition id for the batch execution jobs of this batch
-	BatchJobDefinitionId string `json:"batchJobDefinitionId"`
-	// The tenant id of the batch
-	TenantId string `json:"tenantId"`
-}
-
 // QuerySetRetriesSync a query for SetRetriesSync request
 type QuerySetRetriesSync struct {
 	// The number of retries to set for the external task. Must be >= 0. If this is 0, an incident is created
