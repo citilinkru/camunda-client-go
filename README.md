@@ -112,6 +112,7 @@ Features
 * Support api version `7.11`
 * Full support API `External Task`
 * Full support API `Process Definition`
+* Full support API `Process Instance`
 * Full support API `Deployment`
 * Partial support API `History`
 * Without external dependencies
