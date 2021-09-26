@@ -39,7 +39,9 @@ type ProcessorOptions struct {
 
 // NewProcessor a create new instance Processor
 func NewProcessor(client *camundaclientgo.Client, options *ProcessorOptions, logger func(err error)) *Processor {
+	rand.Seed(time.Now().UnixNano())
 	if options.WorkerId == "" {
+		// #nosec G404 This is valid for worker selection
 		options.WorkerId = fmt.Sprintf("worker-%d", rand.Int())
 	}
 

@@ -250,6 +250,6 @@ func (d *Deployment) GetResourceBinary(id, resourceId string) (data []byte, err 
 
 // Delete deletes a deployment by id
 func (d *Deployment) Delete(id string, query map[string]string) error {
-	_, err := d.client.doDelete("/deployment/"+id, query)
+	err := d.client.doDelete("/deployment/"+id, query)
 	return err
 }
