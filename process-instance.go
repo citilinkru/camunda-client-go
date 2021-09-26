@@ -88,13 +88,13 @@ type ReqModifyProcessInstance struct {
 	SkipCustomListeners *bool `json:"skipCustomListeners"`
 	// Skip execution of input/output variable mappings for activities that are started or ended as part of this request.
 	SkipIOMappings *bool `json:"skipIoMappings"`
-	//A JSON array of modification instructions. The instructions are executed in the order they are in.
+	// A JSON array of modification instructions. The instructions are executed in the order they are in.
 	Instructions *[]ReqModifyProcessInstanceInstruction `json:"instructions"`
 	// An arbitrary text annotation set by a user for auditing reasons.
 	Annotation *string `json:"annotation"`
 }
 
-//ReqProcessVariableQuery a JSON object with the following properties: (at least an empty JSON object {}
+// ReqProcessVariableQuery a JSON object with the following properties: (at least an empty JSON object {}
 // or an empty request body)
 type ReqProcessVariableQuery struct {
 	// Process variable name
@@ -523,7 +523,7 @@ func (q *QueryProcessInstanceVariableBy) String() string {
 
 // DeleteProcessVariable deletes a variable of a process instance by id.
 func (p *ProcessInstance) DeleteProcessVariable(by QueryProcessInstanceVariableBy) error {
-	_, err := p.client.doDelete(by.String(), nil)
+	err := p.client.doDelete(by.String(), nil)
 	return err
 }
 
@@ -580,7 +580,7 @@ func (p *ProcessInstance) UpdateProcessVariable(by QueryProcessInstanceVariableB
 // Delete deletes a running process instance by id.
 // https://docs.camunda.org/manual/latest/reference/rest/process-instance/delete/#query-parameters
 func (p *ProcessInstance) Delete(id string, query map[string]string) error {
-	_, err := p.client.doDelete("/process-instance/"+id, query)
+	err := p.client.doDelete("/process-instance/"+id, query)
 	return err
 }
 

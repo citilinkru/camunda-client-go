@@ -148,12 +148,15 @@ func (c *Client) doPutJson(path string, query map[string]string, v interface{}) 
 		return err
 	}
 
+	//nolint:bodyclose
 	_, err := c.do(http.MethodPut, path, query, body, "application/json")
 	return err
 }
 
-func (c *Client) doDelete(path string, query map[string]string) (res *http.Response, err error) {
-	return c.do(http.MethodDelete, path, query, nil, "")
+func (c *Client) doDelete(path string, query map[string]string) error {
+	//nolint:bodyclose
+	_, err := c.do(http.MethodDelete, path, query, nil, "")
+	return err
 }
 
 func (c *Client) doPost(path string, query map[string]string) (res *http.Response, err error) {
