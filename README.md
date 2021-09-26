@@ -1,5 +1,7 @@
 # Camunda REST API client for golang
-[![Build Status](https://travis-ci.org/citilinkru/camunda-client-go.svg?branch=master)](https://travis-ci.org/citilinkru/camunda-client-go)&nbsp;[![GoDoc](https://godoc.org/github.com/citilinkru/camunda-client-go?status.svg)](https://godoc.org/github.com/citilinkru/camunda-client-go)
+[![Go Report Card](https://goreportcard.com/badge/github.com/citilinkru/camunda-client-go)](https://goreportcard.com/report/github.com/citilinkru/camunda-client-go)
+[![Go Reference](https://pkg.go.dev/badge/github.com/citilinkru/camunda-client-go.svg)](https://pkg.go.dev/github.com/citilinkru/camunda-client-go)
+[![Release](https://img.shields.io/github/release/citilinkru/camunda-client-go.svg?style=flat-square)](https://github.com/citilinkru/camunda-client-go/releases/latest)
 
 Installation
 -----------
@@ -132,7 +134,7 @@ go test -v -race ./...
 
 Run linter:
 ```bash
-docker run --rm -v $(pwd):/app -w /app golangci/golangci-lint:v1.27.0 golangci-lint run -v
+docker run --rm -v $(pwd):/app -w /app golangci/golangci-lint:v1.40 golangci-lint run -v
 ```
 
 Integration tests:
