@@ -555,7 +555,7 @@ func (p *ProcessInstance) GetProcessVariable(by QueryProcessInstanceVariableBy, 
 // GetProcessVariableList retrieves all variables of a given process instance by id.
 // https://docs.camunda.org/manual/latest/reference/rest/process-instance/variables/get-variables/#query-parameters
 func (p *ProcessInstance) GetProcessVariableList(id string, query map[string]string) (processVariables map[string]*ResProcessVariable, err error) {
-	res, err := p.client.doGet("/process-instance/"+id, query)
+	res, err := p.client.doGet("/process-instance/"+id+"/variables", query)
 	if err != nil {
 		return
 	}
