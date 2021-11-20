@@ -4,7 +4,7 @@ These examples will help you learn basic Camunda use cases.
 ## Before use:
 Run Camunda:
 ```bash
-docker run -d --name camunda -p 8080:8080 camunda/camunda-bpm-platform
+docker run --rm --name camunda -p 8080:8080 camunda/camunda-bpm-platform
 ```
 
 ## Examples use scenario

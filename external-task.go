@@ -142,7 +142,7 @@ type QueryFetchAndLockTopic struct {
 	// 	Filter tasks without tenant id
 	WithoutTenantId *string `json:"withoutTenantId,omitempty"`
 	// Filter tasks based on tenant ids
-	TenantIdIn *string `json:"tenantIdIn,omitempty"`
+	TenantIdIn []string `json:"tenantIdIn,omitempty"`
 	// A JSON object used for filtering tasks based on process instance variable values.
 	// A property name of the object represents a process variable name, while the property value
 	// represents the process variable value to filter tasks by
