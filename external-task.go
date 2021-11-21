@@ -146,7 +146,7 @@ type QueryFetchAndLockTopic struct {
 	// A JSON object used for filtering tasks based on process instance variable values.
 	// A property name of the object represents a process variable name, while the property value
 	// represents the process variable value to filter tasks by
-	ProcessVariables map[string]Variable `json:"processVariables,omitempty"`
+	ProcessVariables map[string]interface{} `json:"processVariables,omitempty"`
 	// Determines whether serializable variable values (typically variables that store custom Java objects)
 	// should be deserialized on server side (default false).
 	// If set to true, a serializable variable will be deserialized on server side and transformed to JSON
