@@ -1,5 +1,6 @@
 # Camunda REST API client for golang
 [![Go Report Card](https://goreportcard.com/badge/github.com/citilinkru/camunda-client-go)](https://goreportcard.com/report/github.com/citilinkru/camunda-client-go)
+[![codecov](https://codecov.io/gh/citilinkru/camunda-client-go/branch/master/graph/badge.svg?token=53NH949TQY)](https://codecov.io/gh/citilinkru/camunda-client-go)
 [![Go Reference](https://pkg.go.dev/badge/github.com/citilinkru/camunda-client-go.svg)](https://pkg.go.dev/github.com/citilinkru/camunda-client-go)
 [![Release](https://img.shields.io/github/release/citilinkru/camunda-client-go.svg?style=flat-square)](https://github.com/citilinkru/camunda-client-go/releases/latest)
 
@@ -117,6 +118,7 @@ Features
 * Full support API `Process Instance`
 * Full support API `Deployment`
 * Partial support API `History`
+* Partial support API `Tenant`
 * Without external dependencies
 
 Road map
@@ -138,6 +140,16 @@ docker run --rm -v $(pwd):/app -w /app golangci/golangci-lint:v1.40 golangci-lin
 ```
 
 Integration tests:
+```bash
+docker run --rm --name camunda -p 8080:8080 camunda/camunda-bpm-platform
+```
+
+```bash
+go test -tags=integration -failfast ./...
+```
+
+Examples:
+---------
 Go to [examples directory](examples/README.md) and follow the instructions to run the examples.
 
 CONTRIBUTE
