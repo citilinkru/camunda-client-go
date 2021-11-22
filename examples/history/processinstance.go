@@ -28,11 +28,7 @@ func main() {
 		Timeout:     time.Second * 10,
 	})
 
-	query := camundaclientgo.QueryHistoryProcessInstanceBy{
-		Id: historyId,
-	}
-
-	processInstance, err := client.History.GetProcessInstance(&query)
+	processInstance, err := client.History.GetProcessInstance(historyId)
 	if err != nil {
 		fmt.Printf("Can't get history Process Instance: %s\n", err)
 		os.Exit(1)
