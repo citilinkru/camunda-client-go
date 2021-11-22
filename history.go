@@ -148,16 +148,16 @@ type ReqHistoryVariableInstanceQuery struct {
 	VariableName         *string     `json:"variableName"`
 	VariableNameLike     *string     `json:"variableNameLike"`
 	VariableValue        interface{} `json:"variableValue"`
-	ProcessInstanceID    *string     `json:"processInstanceId"`
-	ProcessInstanceIDIn  *string     `json:"processInstanceIdIn"`
-	ProcessDefinitionID  *string     `json:"process_definition_id"`
-	ExecutionIDIn        *string     `json:"executionIdIn"`
-	CaseInstanceID       *string     `json:"caseInstanceId"`
-	CaseExecutionIDIn    *string     `json:"caseExecutionIdIn"`
-	CaseActivityIDIn     *string     `json:"caseActivityIdIn"`
-	TaskIDIn             *string     `json:"taskIdIn"`
-	ActivityInstanceIDIn *string     `json:"activityInstanceIdIn"`
-	TenantIDIn           *string     `json:"tenantIdIn"`
+	ProcessInstanceId    *string     `json:"processInstanceId"`
+	ProcessInstanceIdIn  *[]string   `json:"processInstanceIdIn"`
+	ProcessDefinitionId  *string     `json:"process_definition_id"`
+	ExecutionIdIn        *[]string   `json:"executionIdIn"`
+	CaseInstanceId       *string     `json:"caseInstanceId"`
+	CaseExecutionIdIn    *[]string   `json:"caseExecutionIdIn"`
+	CaseActivityIdIn     *[]string   `json:"caseActivityIdIn"`
+	TaskIdIn             *[]string   `json:"taskIdIn"`
+	ActivityInstanceIdIn *[]string   `json:"activityInstanceIdIn"`
+	TenantIdIn           *[]string   `json:"tenantIdIn"`
 }
 
 // ResHistoryProcessInstance a response object for process instance
@@ -225,7 +225,7 @@ type ResHistoryProcessInstanceDurationReport struct {
 // ResHistoryVariableInstance a response object for history variable instance
 type ResHistoryVariableInstance struct {
 	// The id of the variable instance.
-	ID string `json:"id"`
+	Id string `json:"id"`
 	// The name of the variable instance.
 	Name string `json:"name"`
 	// The value type of the variable. Can be String/Number/Boolean/Object
@@ -237,25 +237,25 @@ type ResHistoryVariableInstance struct {
 	// The key of the process definition the variable instance belongs to.
 	ProcessDefinitionKey string `json:"processDefinitionKey"`
 	// The id of the process definition the variable instance belongs to.
-	ProcessDefinitionID string `json:"processDefinitionId"`
+	ProcessDefinitionId string `json:"processDefinitionId"`
 	// The process instance id the variable instance belongs to.
-	ProcessInstanceID string `json:"processInstanceId"`
+	ProcessInstanceId string `json:"processInstanceId"`
 	// The execution id the variable instance belongs to.
-	ExecutionID string `json:"executionId"`
+	ExecutionId string `json:"executionId"`
 	// The id of the activity instance in which the variable is valid.
-	ActivityInstanceID string `json:"activityInstanceId"`
+	ActivityInstanceId string `json:"activityInstanceId"`
 	// The key of the case definition the variable instance belongs to.
 	CaseDefinitionKey string `json:"caseDefinitionKey"`
 	// The id of the case definition the variable instance belongs to.
-	CaseDefinitionID string `json:"caseDefinitionId"`
+	CaseDefinitionId string `json:"caseDefinitionId"`
 	// The case instance id the variable instance belongs to.
-	CaseInstanceID string `json:"caseInstanceId"`
+	CaseInstanceId string `json:"caseInstanceId"`
 	// The case execution id the variable instance belongs to.
-	CaseExecutionID string `json:"caseExecutionId"`
+	CaseExecutionId string `json:"caseExecutionId"`
 	// The id of the task the variable instance belongs to.
-	TaskID string `json:"taskId"`
+	TaskId string `json:"taskId"`
 	// The id of the tenant that this variable instance belongs to.
-	TenantID string `json:"tenantId"`
+	TenantId string `json:"tenantId"`
 	// An error message in case a Java Serialized Object could not be de-serialized.
 	ErrorMessage string `json:"errorMessage"`
 }

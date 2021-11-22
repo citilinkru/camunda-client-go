@@ -77,7 +77,7 @@ type QueryGetListPost struct {
 	// Filter by the id of the activity that an external task is created for
 	ActivityId *string `json:"activityId,omitempty"`
 	// Filter by the comma-separated list of ids of the activities that an external task is created for
-	ActivityIdIn *string `json:"activityIdIn,omitempty"`
+	ActivityIdIn *[]string `json:"activityIdIn,omitempty"`
 	// Filter by the id of the execution that an external task belongs to
 	ExecutionId *string `json:"executionId,omitempty"`
 	// Filter by the id of the process instance that an external task belongs to
@@ -85,7 +85,7 @@ type QueryGetListPost struct {
 	// Filter by the id of the process definition that an external task belongs to
 	ProcessDefinitionId *string `json:"processDefinitionId,omitempty"`
 	// Filter by a comma-separated list of tenant ids. An external task must have one of the given tenant ids
-	TenantIdIn *string `json:"tenantIdIn,omitempty"`
+	TenantIdIn *[]string `json:"tenantIdIn,omitempty"`
 	// Only include active tasks. Value may only be true, as false matches any external task
 	Active *bool `json:"active,omitempty"`
 	// Only include suspended tasks. Value may only be true, as false matches any external task
@@ -134,7 +134,7 @@ type QueryFetchAndLockTopic struct {
 	// Filter tasks based on process definition id
 	ProcessDefinitionId *string `json:"processDefinitionId,omitempty"`
 	// Filter tasks based on process definition ids
-	ProcessDefinitionIdIn *string `json:"processDefinitionIdIn,omitempty"`
+	ProcessDefinitionIdIn *[]string `json:"processDefinitionIdIn,omitempty"`
 	// Filter tasks based on process definition key
 	ProcessDefinitionKey *string `json:"processDefinitionKey,omitempty"`
 	// Filter tasks based on process definition keys
@@ -310,16 +310,6 @@ type QuerySetRetriesSync struct {
 	// The number of retries to set for the external task. Must be >= 0. If this is 0, an incident is created
 	// and the task cannot be fetched anymore unless the retries are increased again. Can not be null
 	Retries int `json:"retries"`
-	// The ids of the external tasks to set the number of retries for
-	ExternalTaskIds *string `json:"externalTaskIds,omitempty"`
-	// The ids of process instances containing the tasks to set the number of retries for
-	ProcessInstanceIds *string `json:"processInstanceIds,omitempty"`
-	// Query for the external tasks to set the number of retries for
-	ExternalTaskQuery *string `json:"externalTaskQuery,omitempty"`
-	// Query for the process instances containing the tasks to set the number of retries for
-	ProcessInstanceQuery *string `json:"processInstanceQuery,omitempty"`
-	// Query for the historic process instances containing the tasks to set the number of retries for
-	HistoricProcessInstanceQuery *string `json:"historicProcessInstanceQuery,omitempty"`
 }
 
 // Get retrieves an external task by id, corresponding to the ExternalTask interface in the engine
@@ -379,22 +369,19 @@ func (e *ExternalTask) GetListCount(query map[string]string) (int, error) {
 // GetListPost queries for external tasks that fulfill given parameters in the form of a JSON object.
 // This method is slightly more powerful than the Get External Tasks method
 // because it allows to specify a hierarchical result sorting.
-func (e *ExternalTask) GetListPost(query QueryGetListPost, firstResult, maxResults int) ([]*ResExternalTask, error) {
-	resp := []*ResExternalTask{}
+// https://docs.camunda.org/manual/latest/reference/rest/external-task/post-query/#query-parameters
+func (e *ExternalTask) GetListPost(query map[string]string, req QueryGetListPost) (resp []*ResExternalTask, err error) {
 	res, err := e.client.doPostJson(
 		"/external-task",
-		map[string]string{},
-		&query,
+		query,
+		req,
 	)
 	if err != nil {
-		return nil, err
+		return
 	}
 
-	if err := e.client.readJsonResponse(res, &resp); err != nil {
-		return nil, err
-	}
-
-	return resp, nil
+	err = e.client.readJsonResponse(res, &resp)
+	return
 }
 
 // GetListPostCount queries for the number of external tasks that fulfill given parameters.
@@ -469,8 +456,9 @@ func (e *ExternalTask) ExtendLock(id string, query QueryExtendLock) error {
 
 // SetPriority a sets the priority of an existing external task by id. The default value of a priority is 0
 func (e *ExternalTask) SetPriority(id string, priority int) error {
-	_, err := e.client.doPut("/external-task/"+id+"/priority", map[string]string{})
-	return err
+	return e.client.doPutJson("/external-task/"+id+"/priority", map[string]string{}, map[string]int{
+		"priority": priority,
+	})
 }
 
 // SetRetries a sets the number of retries left to execute an external task by id. If retries are set to 0,
@@ -484,7 +472,7 @@ func (e *ExternalTask) SetRetries(id string, retries int) error {
 // SetRetriesAsync a set Retries For Multiple External Tasks Async (Batch).
 // Sets the number of retries left to execute external tasks by id asynchronously.
 // If retries are set to 0, an incident is created
-func (e *ExternalTask) SetRetriesAsync(id string, query QuerySetRetriesAsync) (*ResBatch, error) {
+func (e *ExternalTask) SetRetriesAsync(query QuerySetRetriesAsync) (*ResBatch, error) {
 	resp := ResBatch{}
 	res, err := e.client.doPostJson(
 		"/external-task/retries-async",
@@ -506,5 +494,5 @@ func (e *ExternalTask) SetRetriesAsync(id string, query QuerySetRetriesAsync) (*
 // Sets the number of retries left to execute external tasks by id synchronously.
 // If retries are set to 0, an incident is created
 func (e *ExternalTask) SetRetriesSync(id string, query QuerySetRetriesSync) error {
-	return e.client.doPutJson("/external-task/retries", map[string]string{}, &query)
+	return e.client.doPutJson("/external-task/"+id+"/retries", map[string]string{}, &query)
 }
