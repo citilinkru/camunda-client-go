@@ -1,4 +1,4 @@
-module github.com/citilinkru/camunda-client-go/v2
+module github.com/citilinkru/camunda-client-go
 
 go 1.14
 

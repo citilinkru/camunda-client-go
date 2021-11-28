@@ -88,7 +88,7 @@ type ReqStartInstance struct {
 	CaseInstanceId *string `json:"caseInstanceId,omitempty"`
 	// Optional. A JSON array of instructions that specify which activities to start the process instance at.
 	// If this property is omitted, the process instance starts at its default blank start event
-	StartInstructions *[]ReqStartInstructions `json:"startInstructions,omitempty"`
+	StartInstructions []ReqStartInstructions `json:"startInstructions,omitempty"`
 	// Skip execution listener invocation for activities that are started or ended as part of this request
 	// Note: This option is currently only respected when start instructions are submitted via
 	// the startInstructions property
@@ -109,7 +109,7 @@ type ReqRestartInstance struct {
 	HistoricProcessInstanceQuery *string `json:"historicProcessInstanceQuery,omitempty"`
 	// Optional. A JSON array of instructions that specify which activities to start the process instance at.
 	// If this property is omitted, the process instance starts at its default blank start event
-	StartInstructions *[]ReqStartInstructions `json:"startInstructions,omitempty"`
+	StartInstructions []ReqStartInstructions `json:"startInstructions,omitempty"`
 	// Skip execution listener invocation for activities that are started or ended as part of this request
 	// Note: This option is currently only respected when start instructions are submitted via
 	// the startInstructions property

@@ -4,7 +4,7 @@ package processor
 
 import (
 	"fmt"
-	camundaclientgo "github.com/citilinkru/camunda-client-go/v2"
+	camundaclientgo "github.com/citilinkru/camunda-client-go"
 	"github.com/stretchr/testify/assert"
 	"os"
 	"testing"
@@ -44,7 +44,7 @@ func init() {
 }
 
 func TestComplete(t *testing.T) {
-	proc := NewProcessor(client, &ProcessorOptions{
+	proc := NewProcessor(client, &Options{
 		WorkerId:                  "hello-world-worker",
 		LockDuration:              time.Second * 5,
 		MaxTasks:                  10,
@@ -66,7 +66,7 @@ func TestComplete(t *testing.T) {
 
 	done := make(chan bool)
 	proc.AddHandler(
-		&[]camundaclientgo.QueryFetchAndLockTopic{
+		[]*camundaclientgo.QueryFetchAndLockTopic{
 			{TopicName: "PrintHello"},
 		},
 		func(ctx *Context) error {

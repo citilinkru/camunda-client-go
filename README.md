@@ -6,7 +6,7 @@
 
 Installation
 -----------
-	go get github.com/citilinkru/camunda-client-go/v2
+	go get github.com/citilinkru/camunda-client-go
 	
 Usage
 -----------
@@ -70,7 +70,7 @@ logger := func(err error) {
 	fmt.Println(err.Error())
 }
 asyncResponseTimeout := 5000
-proc := processor.NewProcessor(client, &processor.ProcessorOptions{
+proc := processor.NewProcessor(client, &processor.Options{
     WorkerId: "demo-worker",
     LockDuration: time.Second * 5,
     MaxTasks: 10,
@@ -82,7 +82,7 @@ proc := processor.NewProcessor(client, &processor.ProcessorOptions{
 Add and subscribe external task handler: 
 ```go
 proc.AddHandler(
-    &[]camunda_client_go.QueryFetchAndLockTopic{
+    []*camunda_client_go.QueryFetchAndLockTopic{
         {TopicName: "HelloWorldSetter"},
     },
     func(ctx *processor.Context) error {
@@ -136,7 +136,7 @@ go test -v -race ./...
 
 Run linter:
 ```bash
-docker run --rm -v $(pwd):/app -w /app golangci/golangci-lint:v1.40 golangci-lint run -v
+docker run --rm -v $(pwd):/app -w /app golangci/golangci-lint:v1.42.0 golangci-lint run -v
 ```
 
 Integration tests:
