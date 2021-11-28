@@ -26,7 +26,7 @@ func init() {
 	file, err := os.Open("examples/deployment/HelloWorld.bpmn")
 	if err != nil {
 		fmt.Printf("Error read file: %s\n", err)
-		os.Exit(1)
+		return
 	}
 	_, err = client.Deployment.Create(ReqDeploymentCreate{
 		DeploymentName: "HelloWorldProcessDemo",
@@ -36,6 +36,6 @@ func init() {
 	})
 	if err != nil {
 		fmt.Printf("Error deploy process: %s\n", err)
-		os.Exit(1)
+		return
 	}
 }

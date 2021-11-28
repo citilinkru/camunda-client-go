@@ -77,7 +77,7 @@ type QueryGetListPost struct {
 	// Filter by the id of the activity that an external task is created for
 	ActivityId *string `json:"activityId,omitempty"`
 	// Filter by the comma-separated list of ids of the activities that an external task is created for
-	ActivityIdIn *[]string `json:"activityIdIn,omitempty"`
+	ActivityIdIn []string `json:"activityIdIn,omitempty"`
 	// Filter by the id of the execution that an external task belongs to
 	ExecutionId *string `json:"executionId,omitempty"`
 	// Filter by the id of the process instance that an external task belongs to
@@ -85,7 +85,7 @@ type QueryGetListPost struct {
 	// Filter by the id of the process definition that an external task belongs to
 	ProcessDefinitionId *string `json:"processDefinitionId,omitempty"`
 	// Filter by a comma-separated list of tenant ids. An external task must have one of the given tenant ids
-	TenantIdIn *[]string `json:"tenantIdIn,omitempty"`
+	TenantIdIn []string `json:"tenantIdIn,omitempty"`
 	// Only include active tasks. Value may only be true, as false matches any external task
 	Active *bool `json:"active,omitempty"`
 	// Only include suspended tasks. Value may only be true, as false matches any external task
@@ -114,7 +114,7 @@ type QueryFetchAndLock struct {
 	AsyncResponseTimeout *int `json:"asyncResponseTimeout,omitempty"`
 	// A JSON array of topic objects for which external tasks should be fetched.
 	// The returned tasks may be arbitrarily distributed among these topics
-	Topics *[]QueryFetchAndLockTopic `json:"topics,omitempty"`
+	Topics []*QueryFetchAndLockTopic `json:"topics,omitempty"`
 }
 
 // QueryFetchAndLockTopic a JSON array of topic objects for which external tasks should be fetched
@@ -126,7 +126,7 @@ type QueryFetchAndLockTopic struct {
 	// A JSON array of String values that represent variable names. For each result task belonging to this topic,
 	// the given variables are returned as well if they are accessible from the external task's execution.
 	// If not provided - all variables will be fetched
-	Variables *[]string `json:"variables,omitempty"`
+	Variables []string `json:"variables,omitempty"`
 	// If true only local variables will be fetched
 	LocalVariables *bool `json:"localVariables,omitempty"`
 	// A String value which enables the filtering of tasks based on process instance business key
@@ -134,7 +134,7 @@ type QueryFetchAndLockTopic struct {
 	// Filter tasks based on process definition id
 	ProcessDefinitionId *string `json:"processDefinitionId,omitempty"`
 	// Filter tasks based on process definition ids
-	ProcessDefinitionIdIn *[]string `json:"processDefinitionIdIn,omitempty"`
+	ProcessDefinitionIdIn []string `json:"processDefinitionIdIn,omitempty"`
 	// Filter tasks based on process definition key
 	ProcessDefinitionKey *string `json:"processDefinitionKey,omitempty"`
 	// Filter tasks based on process definition keys

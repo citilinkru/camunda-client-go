@@ -45,7 +45,7 @@ type ReqModifyProcessVariables struct {
 	// A JSON object containing variable key-value pairs. Each key is a variable name and each value a JSON.
 	Modifications *map[string]ReqProcessVariable `json:"modifications,omitempty"`
 	// An array of String keys of variables to be deleted.
-	Deletions *[]string `json:"deletions,omitempty"`
+	Deletions []string `json:"deletions,omitempty"`
 }
 
 // ReqModifyProcessInstanceInstruction a JSON object with the following properties: (at least an empty JSON object {}
@@ -78,7 +78,7 @@ type ReqModifyProcessInstanceInstruction struct {
 	// Can be used with instructions of type startBeforeActivity, startAfterActivity, and startTransition.
 	// A JSON object containing variable key-value pairs.
 	// Each key is a variable name and each value a JSON variable value object.
-	Variables *[]ReqProcessVariable `json:"variables"`
+	Variables []ReqProcessVariable `json:"variables"`
 }
 
 // ReqModifyProcessInstance a JSON object with the following properties: (at least an empty JSON object {}
@@ -89,7 +89,7 @@ type ReqModifyProcessInstance struct {
 	// Skip execution of input/output variable mappings for activities that are started or ended as part of this request.
 	SkipIOMappings *bool `json:"skipIoMappings"`
 	// A JSON array of modification instructions. The instructions are executed in the order they are in.
-	Instructions *[]ReqModifyProcessInstanceInstruction `json:"instructions"`
+	Instructions []ReqModifyProcessInstanceInstruction `json:"instructions"`
 	// An arbitrary text annotation set by a user for auditing reasons.
 	Annotation *string `json:"annotation"`
 }
@@ -110,7 +110,7 @@ type ReqProcessVariableQuery struct {
 // or an empty request body)
 type ReqProcessInstanceQuery struct {
 	// Filter by a list of process instance ids. Must be a JSON array of Strings.
-	ProcessInstanceIds *[]string `json:"processInstanceIds"`
+	ProcessInstanceIds []string `json:"processInstanceIds"`
 	// Filter by process instance business key.
 	BusinessKey *string `json:"businessKey"`
 	// Filter by process instance business key that the parameter is a substring of.
@@ -123,10 +123,10 @@ type ReqProcessInstanceQuery struct {
 	ProcessDefinitionKey *string `json:"processDefinitionKey"`
 	// Filter by a list of process definition keys. A process instance must have one of the
 	// given process definition keys. Must be a JSON array of Strings.
-	ProcessDefinitionKeyIn *[]string `json:"processDefinitionKeyIn"`
+	ProcessDefinitionKeyIn []string `json:"processDefinitionKeyIn"`
 	// Exclude instances by a list of process definition keys. A process instance must not have one of the
 	// given process definition keys. Must be a JSON array of Strings.
-	ProcessDefinitionKeyNotIn *[]string `json:"processDefinitionKeyNotIn"`
+	ProcessDefinitionKeyNotIn []string `json:"processDefinitionKeyNotIn"`
 	// Filter by the deployment the id belongs to.
 	DeploymentId *string `json:"deploymentId"`
 	// Restrict query to all process instances that are sub process instances of the given process instance.
@@ -157,11 +157,11 @@ type ReqProcessInstanceQuery struct {
 	IncidentMessageLike *string `json:"incidentMessageLike"`
 	// Filter by a list of tenant ids. A process instance must have one of the given tenant ids.
 	// Must be a JSON array of Strings.
-	TenantIdIn *[]string `json:"tenantIdIn"`
+	TenantIdIn []string `json:"tenantIdIn"`
 	// Only include process instances which belong to no tenant. Value may only be true, as false is the default behavior.
 	WithoutTenantId *bool `json:"withoutTenantId"`
 	// Filter by a list of activity ids. A process instance must currently wait in a leaf activity with one of the given activity ids.
-	ActivityIdIn *[]string `json:"activityIdIn"`
+	ActivityIdIn []string `json:"activityIdIn"`
 	// Restrict the query to all process instances that are top level process instances.
 	RootProcessInstances *bool `json:"rootProcessInstances"`
 	// Restrict the query to all process instances that are leaf instances. (i.e. don't have any sub instances)
@@ -169,7 +169,7 @@ type ReqProcessInstanceQuery struct {
 	// Only include process instances which process definition has no tenant id.
 	ProcessDefinitionWithoutTenantId *bool `json:"processDefinitionWithoutTenantId"`
 	// A JSON array to only include process instances that have variables with certain values.
-	Variables *[]ReqProcessVariableQuery `json:"variables"`
+	Variables []ReqProcessVariableQuery `json:"variables"`
 	// Match all variable names in this query case-insensitively.
 	// If set to true variable-Name and variable-name are treated as equal.
 	VariableNamesIgnoreCase *bool `json:"variableNamesIgnoreCase"`
@@ -180,18 +180,18 @@ type ReqProcessInstanceQuery struct {
 	// A process instance matches a nested query if it fulfills at least one of the query's predicates.
 	// With multiple nested queries, a process instance must fulfill at least one predicate of each query.
 	// All process instance query properties can be used except for: sorting.
-	OrQueries *[]ReqProcessInstanceQuery `json:"orQueries"`
+	OrQueries []ReqProcessInstanceQuery `json:"orQueries"`
 	// A JSON array of criteria to sort the result by.
 	// Each element of the array is a JSON object that specifies one ordering.
 	// The position in the array identifies the rank of an ordering, i.e., whether it is primary, secondary, etc.
-	Sorting *[]ReqSort `json:"sorting"`
+	Sorting []ReqSort `json:"sorting"`
 }
 
 // ReqDeleteProcessInstance a JSON object with the following properties: (at least an empty JSON object {}
 // or an empty request body)
 type ReqDeleteProcessInstance struct {
 	// A list process instance ids to delete.
-	ProcessInstanceIds *[]string `json:"processInstanceIds"`
+	ProcessInstanceIds []string `json:"processInstanceIds"`
 	// A process instance query
 	ProcessInstanceQuery *ReqProcessInstanceQuery `json:"processInstanceQuery"`
 	// A string with delete reason.
@@ -208,7 +208,7 @@ type ReqDeleteProcessInstance struct {
 // or an empty request body)
 type ReqDeleteHistoryProcessInstance struct {
 	// A list process instance ids to delete.
-	ProcessInstanceIds *[]string `json:"processInstanceIds"`
+	ProcessInstanceIds []string `json:"processInstanceIds"`
 	// A historic process instance query
 	HistoricProcessInstanceQuery *ReqHistoryProcessInstanceQuery `json:"historicProcessInstanceQuery"`
 	// A string with delete reason.
@@ -225,7 +225,7 @@ type ReqDeleteHistoryProcessInstance struct {
 // or an empty request body)
 type ReqProcessInstanceJobRetries struct {
 	// A list of process instance ids to fetch jobs, for which retries will be set.
-	ProcessInstances *[]string `json:"processInstances"`
+	ProcessInstances []string `json:"processInstances"`
 	// A process instance query
 	ProcessInstanceQuery *ReqProcessInstanceQuery `json:"processInstanceQuery"`
 	// An integer representing the number of retries. Please note that the value cannot be negative or null.
@@ -236,7 +236,7 @@ type ReqProcessInstanceJobRetries struct {
 // or an empty request body)
 type ReqHistoricProcessInstanceJobRetries struct {
 	// A list of process instance ids to fetch jobs, for which retries will be set.
-	ProcessInstances *[]string `json:"processInstances"`
+	ProcessInstances []string `json:"processInstances"`
 	// A process instance query
 	HistoricProcessInstanceQuery *ReqHistoryProcessInstanceQuery `json:"historicProcessInstanceQuery"`
 	// An integer representing the number of retries. Please note that the value cannot be negative or null.
@@ -247,7 +247,7 @@ type ReqHistoricProcessInstanceJobRetries struct {
 // or an empty request body)
 type ReqProcessInstanceVariables struct {
 	// A list process instance ids to delete.
-	ProcessInstanceIds *[]string `json:"processInstanceIds"`
+	ProcessInstanceIds []string `json:"processInstanceIds"`
 	// A process instance query
 	ProcessInstanceQuery *ReqProcessInstanceQuery `json:"processInstanceQuery"`
 	// A historic process instance query
@@ -261,7 +261,7 @@ type ReqProcessInstanceVariables struct {
 // or an empty request body)
 type ReqProcessInstanceActivateSuspend struct {
 	// A list process instance ids to delete.
-	ProcessInstanceIds *[]string `json:"processInstanceIds"`
+	ProcessInstanceIds []string `json:"processInstanceIds"`
 	// A process instance query
 	ProcessInstanceQuery *ReqProcessInstanceQuery `json:"processInstanceQuery"`
 	// A historic process instance query

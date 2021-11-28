@@ -12,7 +12,7 @@ type ReqHistoryProcessInstanceQuery struct {
 	// Filter by process instance id.
 	ProcessInstanceId *string `json:"processInstanceId"`
 	// Filter by a list of process instance ids. Must be a JSON array of Strings.
-	ProcessInstanceIds *[]string `json:"processInstanceIds"`
+	ProcessInstanceIds []string `json:"processInstanceIds"`
 	// Filter by process instance business key.
 	BusinessKey *string `json:"processInstanceBusinessKey"`
 	// Filter by process instance business key that the parameter is a substring of.
@@ -25,10 +25,10 @@ type ReqHistoryProcessInstanceQuery struct {
 	ProcessDefinitionKey *string `json:"processDefinitionKey"`
 	// Filter by a list of process definition keys. A process instance must have one of the
 	// given process definition keys. Must be a JSON array of Strings.
-	ProcessDefinitionKeyIn *[]string `json:"processDefinitionKeyIn"`
+	ProcessDefinitionKeyIn []string `json:"processDefinitionKeyIn"`
 	// Exclude instances by a list of process definition keys. A process instance must not have one of the
 	// given process definition keys. Must be a JSON array of Strings.
-	ProcessDefinitionKeyNotIn *[]string `json:"processDefinitionKeyNotIn"`
+	ProcessDefinitionKeyNotIn []string `json:"processDefinitionKeyNotIn"`
 	// Filter by the name of the process definition the instances run on.
 	ProcessDefinitionName *string `json:"processDefinitionName"`
 	// Filter by process definition names that the parameter is a substring of.
@@ -75,13 +75,13 @@ type ReqHistoryProcessInstanceQuery struct {
 	IncidentMessageLike *string `json:"incidentMessageLike"`
 	// Filter by a list of tenant ids. A process instance must have one of the given tenant ids.
 	// Must be a JSON array of Strings.
-	TenantIdIn *[]string `json:"tenantIdIn"`
+	TenantIdIn []string `json:"tenantIdIn"`
 	// Only include process instances which belong to no tenant. Value may only be true, as false is the default behavior.
 	WithoutTenantId *bool `json:"withoutTenantId"`
 	// Filter by a list of activity ids. A process instance must currently wait in a leaf activity with one of the given activity ids.
-	ActivityIdIn *[]string `json:"activityIdIn"`
+	ActivityIdIn []string `json:"activityIdIn"`
 	// Restrict to instance that executed an activity with one of given ids.
-	ExecutedActivityIdIn *[]string `json:"executedActivityIdIn"`
+	ExecutedActivityIdIn []string `json:"executedActivityIdIn"`
 	// Restrict the query to all process instances that are top level process instances.
 	RootProcessInstances *bool `json:"rootProcessInstances"`
 	// Restrict the query to all process instances that are leaf instances. (i.e. don't have any sub instances)
@@ -89,7 +89,7 @@ type ReqHistoryProcessInstanceQuery struct {
 	// Only include process instances which process definition has no tenant id.
 	ProcessDefinitionWithoutTenantId *bool `json:"processDefinitionWithoutTenantId"`
 	// A JSON array to only include process instances that have variables with certain values.
-	Variables *[]ReqProcessVariableQuery `json:"variables"`
+	Variables []ReqProcessVariableQuery `json:"variables"`
 	// Match all variable names in this query case-insensitively.
 	// If set to true variable-Name and variable-name are treated as equal.
 	VariableNamesIgnoreCase *bool `json:"variableNamesIgnoreCase"`
@@ -100,11 +100,11 @@ type ReqHistoryProcessInstanceQuery struct {
 	// A process instance matches a nested query if it fulfills at least one of the query's predicates.
 	// With multiple nested queries, a process instance must fulfill at least one predicate of each query.
 	// All process instance query properties can be used except for: sorting.
-	OrQueries *[]ReqProcessInstanceQuery `json:"orQueries"`
+	OrQueries []ReqProcessInstanceQuery `json:"orQueries"`
 	// A JSON array of criteria to sort the result by.
 	// Each element of the array is a JSON object that specifies one ordering.
 	// The position in the array identifies the rank of an ordering, i.e., whether it is primary, secondary, etc.
-	Sorting *[]ReqSort `json:"sorting"`
+	Sorting []ReqSort `json:"sorting"`
 	// Restrict to instance that was started before the given date.
 	// By default, the date must have the format yyyy-MM-dd'T'HH:mm:ss.SSSZ, e.g., 2013-01-23T14:42:45.000+0200.
 	StartedBefore *string `json:"startedBefore"`
@@ -135,7 +135,7 @@ type ReqHistoryProcessInstanceQuery struct {
 // or an empty request body)
 type ReqHistoryDeleteProcessInstance struct {
 	// A list process instance ids to delete.
-	HistoricProcessInstanceIds *[]string `json:"historicProcessInstanceIds,omitempty"`
+	HistoricProcessInstanceIds []string `json:"historicProcessInstanceIds,omitempty"`
 	// A process instance query
 	HistoricProcessInstanceQuery *ReqProcessInstanceQuery `json:"historicProcessInstanceQuery,omitempty"`
 	// A string with delete reason.
@@ -149,15 +149,15 @@ type ReqHistoryVariableInstanceQuery struct {
 	VariableNameLike     *string     `json:"variableNameLike"`
 	VariableValue        interface{} `json:"variableValue"`
 	ProcessInstanceId    *string     `json:"processInstanceId"`
-	ProcessInstanceIdIn  *[]string   `json:"processInstanceIdIn"`
+	ProcessInstanceIdIn  []string    `json:"processInstanceIdIn"`
 	ProcessDefinitionId  *string     `json:"process_definition_id"`
-	ExecutionIdIn        *[]string   `json:"executionIdIn"`
+	ExecutionIdIn        []string    `json:"executionIdIn"`
 	CaseInstanceId       *string     `json:"caseInstanceId"`
-	CaseExecutionIdIn    *[]string   `json:"caseExecutionIdIn"`
-	CaseActivityIdIn     *[]string   `json:"caseActivityIdIn"`
-	TaskIdIn             *[]string   `json:"taskIdIn"`
-	ActivityInstanceIdIn *[]string   `json:"activityInstanceIdIn"`
-	TenantIdIn           *[]string   `json:"tenantIdIn"`
+	CaseExecutionIdIn    []string    `json:"caseExecutionIdIn"`
+	CaseActivityIdIn     []string    `json:"caseActivityIdIn"`
+	TaskIdIn             []string    `json:"taskIdIn"`
+	ActivityInstanceIdIn []string    `json:"activityInstanceIdIn"`
+	TenantIdIn           []string    `json:"tenantIdIn"`
 }
 
 // ResHistoryProcessInstance a response object for process instance

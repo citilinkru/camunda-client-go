@@ -30,12 +30,12 @@ func TestFetchAndLockIntegration(t *testing.T) {
 	assert.NoError(t, err)
 
 	// wait processing StartInstance in camunda
-	time.Sleep(time.Second * 10)
+	time.Sleep(time.Second * 15)
 
 	tasks, err := client.ExternalTask.FetchAndLock(QueryFetchAndLock{
 		WorkerId: "test-fetch-and-lock-integration",
 		MaxTasks: 10,
-		Topics: &[]QueryFetchAndLockTopic{
+		Topics: []*QueryFetchAndLockTopic{
 			{
 				LockDuration: 1000,
 				TopicName:    "PrintHello",
@@ -53,7 +53,7 @@ func TestFetchAndLockIntegration(t *testing.T) {
 	tasks, err = client.ExternalTask.FetchAndLock(QueryFetchAndLock{
 		WorkerId: "test-fetch-and-lock-integration",
 		MaxTasks: 10,
-		Topics: &[]QueryFetchAndLockTopic{
+		Topics: []*QueryFetchAndLockTopic{
 			{
 				LockDuration: 1000,
 				TopicName:    "PrintHello",

@@ -7,18 +7,18 @@ import (
 	"runtime/debug"
 	"time"
 
-	camundaclientgo "github.com/citilinkru/camunda-client-go/v2"
+	camundaclientgo "github.com/citilinkru/camunda-client-go"
 )
 
 // Processor external task processor
 type Processor struct {
 	client  *camundaclientgo.Client
-	options *ProcessorOptions
+	options *Options
 	logger  func(err error)
 }
 
-// ProcessorOptions options for Processor
-type ProcessorOptions struct {
+// Options options for Processor
+type Options struct {
 	// workerId for all request (default: `worker-{random_int}`)
 	WorkerId string
 	// lock duration for all external task
@@ -38,7 +38,7 @@ type ProcessorOptions struct {
 }
 
 // NewProcessor a create new instance Processor
-func NewProcessor(client *camundaclientgo.Client, options *ProcessorOptions, logger func(err error)) *Processor {
+func NewProcessor(client *camundaclientgo.Client, options *Options, logger func(err error)) *Processor {
 	rand.Seed(time.Now().UnixNano())
 	if options.WorkerId == "" {
 		// #nosec G404 This is valid for worker selection
@@ -92,11 +92,9 @@ func (c *Context) HandleFailure(query QueryHandleFailure) error {
 }
 
 // AddHandler a add handler for external task
-func (p *Processor) AddHandler(topics *[]camundaclientgo.QueryFetchAndLockTopic, handler Handler) {
+func (p *Processor) AddHandler(topics []*camundaclientgo.QueryFetchAndLockTopic, handler Handler) {
 	if topics != nil && p.options.LockDuration != 0 {
-		for i := range *topics {
-			v := &(*topics)[i]
-
+		for _, v := range topics {
 			if v.LockDuration <= 0 {
 				v.LockDuration = int(p.options.LockDuration / time.Millisecond)
 			}

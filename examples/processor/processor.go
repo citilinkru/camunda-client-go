@@ -2,8 +2,8 @@ package main
 
 import (
 	"fmt"
-	camundaclientgo "github.com/citilinkru/camunda-client-go/v2"
-	"github.com/citilinkru/camunda-client-go/v2/processor"
+	camundaclientgo "github.com/citilinkru/camunda-client-go"
+	"github.com/citilinkru/camunda-client-go/processor"
 	"time"
 )
 
@@ -18,7 +18,7 @@ func main() {
 	logger := func(err error) {
 		fmt.Println(err.Error())
 	}
-	proc := processor.NewProcessor(client, &processor.ProcessorOptions{
+	proc := processor.NewProcessor(client, &processor.Options{
 		WorkerId:                  "hello-world-worker",
 		LockDuration:              time.Second * 5,
 		MaxTasks:                  10,
@@ -27,7 +27,7 @@ func main() {
 	}, logger)
 
 	proc.AddHandler(
-		&[]camundaclientgo.QueryFetchAndLockTopic{
+		[]*camundaclientgo.QueryFetchAndLockTopic{
 			{TopicName: "PrintHello"},
 		},
 		func(ctx *processor.Context) error {
@@ -51,7 +51,7 @@ func main() {
 	)
 
 	proc.AddHandler(
-		&[]camundaclientgo.QueryFetchAndLockTopic{
+		[]*camundaclientgo.QueryFetchAndLockTopic{
 			{TopicName: "PrintWorld"},
 		},
 		func(ctx *processor.Context) error {
