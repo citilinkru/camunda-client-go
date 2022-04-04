@@ -35,8 +35,8 @@ type ResExternalTask struct {
 	ProcessInstanceId string `json:"processInstanceId"`
 	// The id of the tenant the external task belongs to
 	TenantId string `json:"tenantId"`
-	// The number of retries the task currently has left
-	Retries int `json:"retries"`
+	// The number of retries the task currently has left. Could be null in case retries were not set earlier and this is the first retry.
+	Retries *int `json:"retries"`
 	// A flag indicating whether the external task is suspended or not
 	Suspended bool `json:"suspended"`
 	// The id of the worker that possesses or possessed the most recent lock
@@ -192,8 +192,8 @@ type ResLockedExternalTask struct {
 	ProcessInstanceId string `json:"processInstanceId"`
 	// The id of the tenant the external task belongs to
 	TenantId string `json:"tenantId"`
-	// The number of retries the task currently has left
-	Retries int `json:"retries"`
+	// The number of retries the task currently has left. Could be null in case retries were not set earlier and this is the first retry.
+	Retries *int `json:"retries"`
 	// The id of the worker that possesses or possessed the most recent lock
 	WorkerId string `json:"workerId"`
 	// The priority of the external task
