@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"time"
 
-	camundaclientgo "github.com/citilinkru/camunda-client-go"
+	camundaclientgo "github.com/citilinkru/camunda-client-go/v3"
 )
 
 func main() {

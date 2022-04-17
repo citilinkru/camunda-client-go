@@ -427,9 +427,13 @@ func (t *userTaskApi) GetListCount(query *UserTaskGetListQuery) (int64, error) {
 
 // Complete complete user task by id
 func (t *userTaskApi) Complete(id string, query QueryUserTaskComplete) error {
-	_, err := t.client.doPostJson("/task/"+id+"/complete", map[string]string{}, query)
+	res, err := t.client.doPostJson("/task/"+id+"/complete", map[string]string{}, query)
 	if err != nil {
 		return fmt.Errorf("can't post json: %w", err)
+	}
+
+	if res != nil {
+		res.Body.Close()
 	}
 
 	return nil

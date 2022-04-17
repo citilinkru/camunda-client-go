@@ -1,10 +1,11 @@
+//go:build integration
 // +build integration
 
 package processor
 
 import (
 	"fmt"
-	camundaclientgo "github.com/citilinkru/camunda-client-go"
+	camundaclientgo "github.com/citilinkru/camunda-client-go/v3"
 	"github.com/stretchr/testify/assert"
 	"os"
 	"testing"
