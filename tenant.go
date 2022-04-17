@@ -16,6 +16,9 @@ func (p *Tenant) Create(id, name string) (err error) {
 		Id:   id,
 		Name: name,
 	}
-	_, err = p.client.doPostJson("/tenant/create", map[string]string{}, &req)
-	return
+	res, err := p.client.doPostJson("/tenant/create", map[string]string{}, &req)
+	if res != nil {
+		res.Body.Close()
+	}
+	return err
 }

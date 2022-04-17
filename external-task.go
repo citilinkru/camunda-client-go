@@ -423,14 +423,20 @@ func (e *ExternalTask) FetchAndLock(query QueryFetchAndLock) ([]*ResLockedExtern
 
 // Complete a completes an external task by id and updates process variables
 func (e *ExternalTask) Complete(id string, query QueryComplete) error {
-	_, err := e.client.doPostJson("/external-task/"+id+"/complete", map[string]string{}, &query)
+	res, err := e.client.doPostJson("/external-task/"+id+"/complete", map[string]string{}, &query)
+	if res != nil {
+		res.Body.Close()
+	}
 	return err
 }
 
 // HandleBPMNError reports a business error in the context of a running external task by id.
 // The error code must be specified to identify the BPMN error handler
 func (e *ExternalTask) HandleBPMNError(id string, query QueryHandleBPMNError) error {
-	_, err := e.client.doPostJson("/external-task/"+id+"/bpmnError", map[string]string{}, &query)
+	res, err := e.client.doPostJson("/external-task/"+id+"/bpmnError", map[string]string{}, &query)
+	if res != nil {
+		res.Body.Close()
+	}
 	return err
 }
 
@@ -438,19 +444,28 @@ func (e *ExternalTask) HandleBPMNError(id string, query QueryHandleBPMNError) er
 // A number of retries and a timeout until the task can be retried can be specified.
 // If retries are set to 0, an incident for this task is created
 func (e *ExternalTask) HandleFailure(id string, query QueryHandleFailure) error {
-	_, err := e.client.doPostJson("/external-task/"+id+"/failure", map[string]string{}, &query)
+	res, err := e.client.doPostJson("/external-task/"+id+"/failure", map[string]string{}, &query)
+	if res != nil {
+		res.Body.Close()
+	}
 	return err
 }
 
 // Unlock a unlocks an external task by id. Clears the task’s lock expiration time and worker id
 func (e *ExternalTask) Unlock(id string) error {
-	_, err := e.client.doPost("/external-task/"+id+"/unlock", map[string]string{})
+	res, err := e.client.doPost("/external-task/"+id+"/unlock", map[string]string{})
+	if res != nil {
+		res.Body.Close()
+	}
 	return err
 }
 
 // ExtendLock a extends the timeout of the lock by a given amount of time
 func (e *ExternalTask) ExtendLock(id string, query QueryExtendLock) error {
-	_, err := e.client.doPostJson("/external-task/"+id+"/extendLock", map[string]string{}, &query)
+	res, err := e.client.doPostJson("/external-task/"+id+"/extendLock", map[string]string{}, &query)
+	if res != nil {
+		res.Body.Close()
+	}
 	return err
 }
 

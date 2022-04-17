@@ -6,7 +6,7 @@
 
 Installation
 -----------
-	go get github.com/citilinkru/camunda-client-go
+	go get github.com/citilinkru/camunda-client-go/v3
 	
 Usage
 -----------
@@ -136,7 +136,7 @@ go test -v -race ./...
 
 Run linter:
 ```bash
-docker run --rm -v $(pwd):/app -w /app golangci/golangci-lint:v1.42.0 golangci-lint run -v
+docker run --rm -v $(pwd):/app -w /app golangci/golangci-lint:v1.45.2 golangci-lint run -v
 ```
 
 Integration tests:

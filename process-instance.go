@@ -442,13 +442,19 @@ func (p *ProcessInstance) GetProcessVariableList(id string, query map[string]str
 // ModifyProcessVariables updates or deletes the variables of a process instance by id. Updates precede deletions.
 // So, if a variable is updated AND deleted, the deletion overrides the update.
 func (p *ProcessInstance) ModifyProcessVariables(id string, req ReqModifyProcessVariables) error {
-	_, err := p.client.doPostJson("/process-instance/"+id+"/variables", nil, req)
+	res, err := p.client.doPostJson("/process-instance/"+id+"/variables", nil, req)
+	if res != nil {
+		res.Body.Close()
+	}
 	return err
 }
 
 // UpdateProcessVariable sets a variable of a given process instance by id.
 func (p *ProcessInstance) UpdateProcessVariable(by QueryProcessInstanceVariableBy, req ReqProcessVariable) error {
-	_, err := p.client.doPostJson(by.String(), nil, req)
+	res, err := p.client.doPostJson(by.String(), nil, req)
+	if res != nil {
+		res.Body.Close()
+	}
 	return err
 }
 
@@ -519,7 +525,10 @@ func (p *ProcessInstance) Get(id string) (processInstance *ResProcessInstance, e
 // Instructions are executed immediately and in the order they are provided in this request's body.
 // Variables can be provided with every starting instruction.
 func (p *ProcessInstance) Modify(id string, req ReqModifyProcessInstance) error {
-	_, err := p.client.doPostJson("/process-instance/"+id+"/modification", nil, req)
+	res, err := p.client.doPostJson("/process-instance/"+id+"/modification", nil, req)
+	if res != nil {
+		res.Body.Close()
+	}
 	return err
 }
 

@@ -466,7 +466,10 @@ func (p *ProcessDefinition) GetDeployedStartForm(by QueryProcessDefinitionBy) (h
 // For more information about the difference between synchronous and asynchronous execution,
 // please refer to the related section of the user guide
 func (p *ProcessDefinition) RestartProcessInstance(id string, req ReqRestartInstance) error {
-	_, err := p.client.doPostJson("/process-definition/"+id+"/restart", map[string]string{}, &req)
+	res, err := p.client.doPostJson("/process-definition/"+id+"/restart", map[string]string{}, &req)
+	if res != nil {
+		res.Body.Close()
+	}
 	return err
 }
 

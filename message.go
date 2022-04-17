@@ -14,6 +14,9 @@ type ReqMessage struct {
 
 // SendMessage sends message to a process
 func (m *Message) SendMessage(query *ReqMessage) error {
-	_, err := m.client.doPostJson("/message", map[string]string{}, query)
+	res, err := m.client.doPostJson("/message", map[string]string{}, query)
+	if res != nil {
+		res.Body.Close()
+	}
 	return err
 }
