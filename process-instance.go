@@ -451,11 +451,7 @@ func (p *ProcessInstance) ModifyProcessVariables(id string, req ReqModifyProcess
 
 // UpdateProcessVariable sets a variable of a given process instance by id.
 func (p *ProcessInstance) UpdateProcessVariable(by QueryProcessInstanceVariableBy, req ReqProcessVariable) error {
-	res, err := p.client.doPostJson(by.String(), nil, req)
-	if res != nil {
-		res.Body.Close()
-	}
-	return err
+	return p.client.doPutJson(by.String(), nil, req)
 }
 
 // Delete deletes a running process instance by id.
