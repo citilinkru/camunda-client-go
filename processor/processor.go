@@ -82,6 +82,14 @@ func (c *Context) Complete(query QueryComplete) error {
 	})
 }
 
+// Extend the lock for a new duration
+func (c *Context) ExtendLock(newDurationMS int) error {
+	return c.client.ExternalTask.ExtendLock(c.Task.Id, camundaclientgo.QueryExtendLock{
+		NewDuration: &newDurationMS,
+		WorkerId:    &c.Task.WorkerId,
+	})
+}
+
 // HandleBPMNError handle external task BPMN error
 func (c *Context) HandleBPMNError(query QueryHandleBPMNError) error {
 	return c.client.ExternalTask.HandleBPMNError(c.Task.Id, camundaclientgo.QueryHandleBPMNError{
