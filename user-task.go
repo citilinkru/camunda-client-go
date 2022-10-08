@@ -6,18 +6,7 @@ import (
 	"time"
 )
 
-// UserTask camunda user task
-type IdentiyLink struct {
-	identities []IndentityLinkTaskResponse
-
-	api *identityLinkApi
-}
-
-type identityLinkApi struct {
-	client *Client
-}
-
-type IndentityLinkTaskResponse struct {
+type IdentityLink struct {
 	// The user id of the assignee.
 	UserId string `json:"userId"`
 	// The group id of the candidate
@@ -28,8 +17,7 @@ type IndentityLinkTaskResponse struct {
 
 // userTaskApi a client for userTaskApi API
 type userTaskApi struct {
-	client      *Client
-	IdentiyLink identityLinkApi
+	client *Client
 }
 
 // UserTaskResponse get task response
@@ -84,12 +72,39 @@ type UserTask struct {
 
 	api *userTaskApi
 
-	*IdentiyLink
+	IdentityLinks []*IdentityLink
 }
 
 // Complete complete user task
 func (t *UserTask) Complete(query QueryUserTaskComplete) error {
 	err := t.api.Complete(t.Id, query)
+	if err != nil {
+		return fmt.Errorf("can't complete task: %w", err)
+	}
+
+	return nil
+}
+
+func (t *UserTask) GetIdentityLinks() (*[]IdentityLink, error) {
+	links, err := t.api.GetIdentityLinks(t.Id)
+	if err != nil {
+		return nil, fmt.Errorf("can't complete task: %w", err)
+	}
+
+	return links, nil
+}
+
+func (t *UserTask) AddIdentityLink(query ReqIdentityLink) error {
+	err := t.api.AddIdentityLink(t.Id, query)
+	if err != nil {
+		return fmt.Errorf("can't complete task: %w", err)
+	}
+
+	return nil
+}
+
+func (t *UserTask) DeleteIdentityLink(query ReqIdentityLink) error {
+	err := t.api.DeleteIdentityLink(t.Id, query)
 	if err != nil {
 		return fmt.Errorf("can't complete task: %w", err)
 	}
@@ -118,7 +133,7 @@ const (
 	VariableFilterExpressionOperatorLike               = "like"
 )
 
-type ReqIdentityLinkCreate struct {
+type ReqIdentityLink struct {
 	UserId  string `json:"userId,omitempty"`
 	GroupId string `json:"groupId,omitempty"`
 	Type    string `json:"type,omitempty"`
@@ -469,25 +484,39 @@ func (t *userTaskApi) Complete(id string, query QueryUserTaskComplete) error {
 }
 
 // Get retrieves a task by id
-func (t *identityLinkApi) GetList(client *Client, id string) (*IdentiyLink, error) {
-	res, err := client.doGet(fmt.Sprintf("/task/%s/identity-links", id), map[string]string{})
+func (t *userTaskApi) GetIdentityLinks(id string) (*[]IdentityLink, error) {
+	res, err := t.client.doGet(fmt.Sprintf("/task/%s/identity-links", id),
+		map[string]string{})
 	if err != nil {
 		return nil, err
 	}
 
-	resp := []IndentityLinkTaskResponse{}
-	if err := client.readJsonResponse(res, &resp); err != nil {
+	resp := []IdentityLink{}
+	if err := t.client.readJsonResponse(res, &resp); err != nil {
 		return nil, fmt.Errorf("can't read json response: %w", err)
 	}
 
-	return &IdentiyLink{
-		api:        t,
-		identities: resp,
-	}, nil
+	return &resp, nil
+
 }
 
-func (t *identityLinkApi) Add(client *Client, id string, query ReqIdentityLinkCreate) error {
-	res, err := client.doPostJson(fmt.Sprintf("/task/%s/identity-links", id), map[string]string{}, query)
+func (t *userTaskApi) AddIdentityLink(id string, query ReqIdentityLink) error {
+	res, err := t.client.doPostJson(fmt.Sprintf("/task/%s/identity-links", id),
+		map[string]string{}, query)
+	if err != nil {
+		return fmt.Errorf("can't post json: %w", err)
+	}
+
+	if res != nil {
+		res.Body.Close()
+	}
+
+	return nil
+}
+
+func (t *userTaskApi) DeleteIdentityLink(id string, query ReqIdentityLink) error {
+	res, err := t.client.doPostJson(fmt.Sprintf("/task/%s/identity-links/delete", id),
+		map[string]string{}, query)
 	if err != nil {
 		return fmt.Errorf("can't post json: %w", err)
 	}
