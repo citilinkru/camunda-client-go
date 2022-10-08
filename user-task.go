@@ -6,6 +6,7 @@ import (
 	"time"
 )
 
+// IdentityLink camunda IdentityLink, e.g. assignee, candidate groups, of UserTask
 type IdentityLink struct {
 	// The user id of the assignee.
 	UserId string `json:"userId"`
@@ -85,6 +86,7 @@ func (t *UserTask) Complete(query QueryUserTaskComplete) error {
 	return nil
 }
 
+// GetIdentityLinks retrieve IdentityLinks of the UserTask
 func (t *UserTask) GetIdentityLinks() (*[]IdentityLink, error) {
 	links, err := t.api.GetIdentityLinks(t.Id)
 	if err != nil {
@@ -94,6 +96,7 @@ func (t *UserTask) GetIdentityLinks() (*[]IdentityLink, error) {
 	return links, nil
 }
 
+// AddIdentityLink add IdentityLink to UserTask
 func (t *UserTask) AddIdentityLink(query ReqIdentityLink) error {
 	err := t.api.AddIdentityLink(t.Id, query)
 	if err != nil {
@@ -103,6 +106,7 @@ func (t *UserTask) AddIdentityLink(query ReqIdentityLink) error {
 	return nil
 }
 
+// DeleteIdentityLink delete IdentityLink from UserTask
 func (t *UserTask) DeleteIdentityLink(query ReqIdentityLink) error {
 	err := t.api.DeleteIdentityLink(t.Id, query)
 	if err != nil {
@@ -133,6 +137,7 @@ const (
 	VariableFilterExpressionOperatorLike               = "like"
 )
 
+// ReqIdentityLink post request for IdentityLink
 type ReqIdentityLink struct {
 	UserId  string `json:"userId,omitempty"`
 	GroupId string `json:"groupId,omitempty"`
@@ -483,7 +488,7 @@ func (t *userTaskApi) Complete(id string, query QueryUserTaskComplete) error {
 	return nil
 }
 
-// Get retrieves a task by id
+// GetIdentityLinks retrieves IdentityLinks by id
 func (t *userTaskApi) GetIdentityLinks(id string) (*[]IdentityLink, error) {
 	res, err := t.client.doGet(fmt.Sprintf("/task/%s/identity-links", id),
 		map[string]string{})
@@ -500,6 +505,7 @@ func (t *userTaskApi) GetIdentityLinks(id string) (*[]IdentityLink, error) {
 
 }
 
+// AddIdentityLink add IdentityLink to UserTask
 func (t *userTaskApi) AddIdentityLink(id string, query ReqIdentityLink) error {
 	res, err := t.client.doPostJson(fmt.Sprintf("/task/%s/identity-links", id),
 		map[string]string{}, query)
@@ -514,6 +520,7 @@ func (t *userTaskApi) AddIdentityLink(id string, query ReqIdentityLink) error {
 	return nil
 }
 
+// DeleteIdentityLink delete IdentityLink by id
 func (t *userTaskApi) DeleteIdentityLink(id string, query ReqIdentityLink) error {
 	res, err := t.client.doPostJson(fmt.Sprintf("/task/%s/identity-links/delete", id),
 		map[string]string{}, query)
