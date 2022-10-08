@@ -6,9 +6,30 @@ import (
 	"time"
 )
 
+// UserTask camunda user task
+type IdentiyLink struct {
+	identities []IndentityLinkTaskResponse
+
+	api *identityLinkApi
+}
+
+type identityLinkApi struct {
+	client *Client
+}
+
+type IndentityLinkTaskResponse struct {
+	// The user id of the assignee.
+	UserId string `json:"userId"`
+	// The group id of the candidate
+	GroupId string `json:"groupId"`
+	// the type of the indentity, either candidate or assign
+	Type string `json:"type"`
+}
+
 // userTaskApi a client for userTaskApi API
 type userTaskApi struct {
-	client *Client
+	client      *Client
+	IdentiyLink identityLinkApi
 }
 
 // UserTaskResponse get task response
@@ -62,6 +83,8 @@ type UserTask struct {
 	*UserTaskResponse
 
 	api *userTaskApi
+
+	*IdentiyLink
 }
 
 // Complete complete user task
@@ -94,6 +117,12 @@ const (
 	VariableFilterExpressionOperatorLessThanOrEqual    = "lteq"
 	VariableFilterExpressionOperatorLike               = "like"
 )
+
+type ReqIdentityLinkCreate struct {
+	UserId  string `json:"userId,omitempty"`
+	GroupId string `json:"groupId,omitempty"`
+	Type    string `json:"type,omitempty"`
+}
 
 // VariableFilterExpression filter expression
 type VariableFilterExpression struct {
@@ -428,6 +457,37 @@ func (t *userTaskApi) GetListCount(query *UserTaskGetListQuery) (int64, error) {
 // Complete complete user task by id
 func (t *userTaskApi) Complete(id string, query QueryUserTaskComplete) error {
 	res, err := t.client.doPostJson("/task/"+id+"/complete", map[string]string{}, query)
+	if err != nil {
+		return fmt.Errorf("can't post json: %w", err)
+	}
+
+	if res != nil {
+		res.Body.Close()
+	}
+
+	return nil
+}
+
+// Get retrieves a task by id
+func (t *identityLinkApi) GetList(client *Client, id string) (*IdentiyLink, error) {
+	res, err := client.doGet(fmt.Sprintf("/task/%s/identity-links", id), map[string]string{})
+	if err != nil {
+		return nil, err
+	}
+
+	resp := []IndentityLinkTaskResponse{}
+	if err := client.readJsonResponse(res, &resp); err != nil {
+		return nil, fmt.Errorf("can't read json response: %w", err)
+	}
+
+	return &IdentiyLink{
+		api:        t,
+		identities: resp,
+	}, nil
+}
+
+func (t *identityLinkApi) Add(client *Client, id string, query ReqIdentityLinkCreate) error {
+	res, err := client.doPostJson(fmt.Sprintf("/task/%s/identity-links", id), map[string]string{}, query)
 	if err != nil {
 		return fmt.Errorf("can't post json: %w", err)
 	}
