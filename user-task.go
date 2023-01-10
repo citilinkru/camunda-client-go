@@ -90,7 +90,7 @@ func (t *UserTask) Complete(query QueryUserTaskComplete) error {
 func (t *UserTask) GetIdentityLinks() (*[]IdentityLink, error) {
 	links, err := t.api.GetIdentityLinks(t.Id)
 	if err != nil {
-		return nil, fmt.Errorf("can't complete task: %w", err)
+		return nil, fmt.Errorf("can't get identity links: %w", err)
 	}
 
 	return links, nil
@@ -100,7 +100,7 @@ func (t *UserTask) GetIdentityLinks() (*[]IdentityLink, error) {
 func (t *UserTask) AddIdentityLink(query ReqIdentityLink) error {
 	err := t.api.AddIdentityLink(t.Id, query)
 	if err != nil {
-		return fmt.Errorf("can't complete task: %w", err)
+		return fmt.Errorf("can't add identity link: %w", err)
 	}
 
 	return nil
@@ -110,7 +110,7 @@ func (t *UserTask) AddIdentityLink(query ReqIdentityLink) error {
 func (t *UserTask) DeleteIdentityLink(query ReqIdentityLink) error {
 	err := t.api.DeleteIdentityLink(t.Id, query)
 	if err != nil {
-		return fmt.Errorf("can't complete task: %w", err)
+		return fmt.Errorf("can't delete identity link: %w", err)
 	}
 
 	return nil
