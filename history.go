@@ -292,72 +292,72 @@ type ReqHistoryTaskQuery struct {
 
 type ResHistoryTaskInstance struct {
 	// The id of the task.
-	Id *string `json:"id"`
+	Id string `json:"id"`
 	// The key of the process definition the task belongs to.
-	ProcessDefinitionKey *string `json:"processDefinitionKey"`
+	ProcessDefinitionKey string `json:"processDefinitionKey"`
 	// The id of the process definition this task belongs to.
-	ProcessDefinitionId *string `json:"processDefinitionId"`
+	ProcessDefinitionId string `json:"processDefinitionId"`
 	// The id of the process instance this task belongs to.
-	ProcessInstanceId *string `json:"processInstanceId"`
+	ProcessInstanceId string `json:"processInstanceId"`
 	// The id of the execution the task belongs to.
-	ExecutionId *string `json:"executionId"`
+	ExecutionId string `json:"executionId"`
 	// The key of the case definition the task belongs to.
-	CaseDefinitionKey *string `json:"caseDefinitionKey"`
+	CaseDefinitionKey string `json:"caseDefinitionKey"`
 	// The id of the case definition the task belongs to.
-	CaseDefinitionId *string `json:"caseDefinitionId"`
+	CaseDefinitionId string `json:"caseDefinitionId"`
 	// The id of the case instance the task belongs to.
-	CaseInstanceId *string `json:"caseInstanceId"`
+	CaseInstanceId string `json:"caseInstanceId"`
 	// The id of the case execution the task belongs to.
-	CaseExecutionId *string `json:"caseExecutionId"`
+	CaseExecutionId string `json:"caseExecutionId"`
 	// The id of the activity that this object is an instance of.
-	ActivityInstanceId *string `json:"activityInstanceId"`
+	ActivityInstanceId string `json:"activityInstanceId"`
 	// The tasks name.
-	Name *string `json:"name"`
+	Name string `json:"name"`
 	// The task description.
-	Description *string `json:"description"`
+	Description string `json:"description"`
 	// The task's delete reason.
-	DeleteReason *string `json:"description"`
+	DeleteReason string `json:"description"`
 	// The owner of the task.
-	Owner *string `json:"owner"`
+	Owner string `json:"owner"`
 	// The user assigned to this task.
-	Assignee *string `json:"assignee"`
+	Assignee string `json:"assignee"`
 	// The time the task was started. Default format* yyyy-MM-dd'T'HH:mm:ss.SSSZ.
-	StartTime *string `json:"startTime"`
+	StartTime string `json:"startTime"`
 	// The time the task ended. Default format* yyyy-MM-dd'T'HH:mm:ss.SSSZ.
-	EndTime *string `json:"endTime"`
+	EndTime string `json:"endTime"`
 	// The time the task took to finish (in milliseconds).
 	Duration int64 `json:"duration"`
 	// The task definition key.
-	TaskDefinitionKey *string `json:"taskDefinitionKey"`
+	TaskDefinitionKey string `json:"taskDefinitionKey"`
 	// The priority of the task.
 	Priority int64 `json:"priority"`
 	// The time the task was created.Format yyyy-MM-dd'T'HH:mm:ss.
-	Created *string `json:"created"`
+	Created string `json:"created"`
 	// The due date for the task.Format yyyy-MM-dd'T'HH:mm:ss.
-	Due *string `json:"due"`
+	Due string `json:"due"`
 	// The id of the parent task, if this task is a subtask.
-	ParentTaskId *string `json:"parentTaskId"`
+	ParentTaskId string `json:"parentTaskId"`
 	// The follow-up date for the task.Format yyyy-MM-dd'T'HH:mm:ss.
-	FollowUp *string `json:"followUp"`
+	FollowUp string `json:"followUp"`
 	// If not null, the tenantId for the task.
-	TenantId *string `json:"tenantId"`
+	TenantId string `json:"tenantId"`
 	// The time after which the task should be removed by the History Cleanup job. Default format* yyyy-MM-dd'T'HH:mm:ss.SSSZ.
-	RemovalTime *string `json:"removalTime"`
+	RemovalTime string `json:"removalTime"`
 	// The process instance id of the root process instance that initiated the process containing this task.
-	RootProcessInstanceId *string `json:"rootProcessInstanceId"`
+	RootProcessInstanceId string `json:"rootProcessInstanceId"`
 }
 
 // ReqHistoryVariableInstanceQuery a JSON object with the following properties: (at least an empty JSON object {}
 // or an empty request body)
 type ReqHistoryVariableInstanceQuery struct {
-	VariableName         *string     `json:"variableName"`
-	VariableNameLike     *string     `json:"variableNameLike"`
+	VariableName         string      `json:"variableName"`
+	VariableNameLike     string      `json:"variableNameLike"`
 	VariableValue        interface{} `json:"variableValue"`
-	ProcessInstanceId    *string     `json:"processInstanceId"`
+	ProcessInstanceId    string      `json:"processInstanceId"`
 	ProcessInstanceIdIn  []string    `json:"processInstanceIdIn"`
-	ProcessDefinitionId  *string     `json:"process_definition_id"`
+	ProcessDefinitionId  string      `json:"process_definition_id"`
 	ExecutionIdIn        []string    `json:"executionIdIn"`
-	CaseInstanceId       *string     `json:"caseInstanceId"`
+	CaseInstanceId       string      `json:"caseInstanceId"`
 	CaseExecutionIdIn    []string    `json:"caseExecutionIdIn"`
 	CaseActivityIdIn     []string    `json:"caseActivityIdIn"`
 	TaskIdIn             []string    `json:"taskIdIn"`
