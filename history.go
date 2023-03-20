@@ -270,7 +270,7 @@ type ReqHistoryTaskQuery struct {
 	ProcessVariables []VariableFilterExpression `json:"processVariables,omitempty"`
 	// Match the variable name provided in taskVariables and processVariables case-insensitively. If set to true variableName and variablename are treated as equal.
 	VariableNamesIgnoreCase bool `json:"variableNamesIgnoreCase,omitempty"`
-	//Match the variable value provided in taskVariables and processVariables case-insensitively. If set to true variableValue and variablevalue are treated as equal.
+	// Match the variable value provided in taskVariables and processVariables case-insensitively. If set to true variableValue and variablevalue are treated as equal.
 	VariableValuesIgnoreCase bool `json:"variableValuesIgnoreCase,omitempty"`
 	// Restrict to tasks with a historic identity link to the given user.
 	TaskInvolvedUser *string `json:"taskInvolvedUser,omitempty"`
@@ -316,7 +316,7 @@ type ResHistoryTaskInstance struct {
 	// The task description.
 	Description string `json:"description"`
 	// The task's delete reason.
-	DeleteReason string `json:"description"`
+	DeleteReason string `json:"deleteReason"`
 	// The owner of the task.
 	Owner string `json:"owner"`
 	// The user assigned to this task.
