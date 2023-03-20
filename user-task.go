@@ -502,7 +502,6 @@ func (t *userTaskApi) GetIdentityLinks(id string) (*[]IdentityLink, error) {
 	}
 
 	return &resp, nil
-
 }
 
 // AddIdentityLink add IdentityLink to UserTask
