@@ -78,7 +78,7 @@ type ReqModifyProcessInstanceInstruction struct {
 	// Can be used with instructions of type startBeforeActivity, startAfterActivity, and startTransition.
 	// A JSON object containing variable key-value pairs.
 	// Each key is a variable name and each value a JSON variable value object.
-	Variables []ReqProcessVariable `json:"variables"`
+	Variables map[string]ReqProcessVariable `json:"variables"`
 }
 
 // ReqModifyProcessInstance a JSON object with the following properties: (at least an empty JSON object {}
@@ -514,10 +514,12 @@ func (p *ProcessInstance) Get(id string) (processInstance *ResProcessInstance, e
 
 // Modify submits a list of modification instructions to change a process instance's execution state.
 // A modification instruction is one of the following:
-//    Starting execution before an activity
-//    Starting execution after an activity on its single outgoing sequence flow
-//    Starting execution on a specific sequence flow
-//    Cancelling an activity instance, transition instance, or all instances (activity or transition) for an activity
+//
+//	Starting execution before an activity
+//	Starting execution after an activity on its single outgoing sequence flow
+//	Starting execution on a specific sequence flow
+//	Cancelling an activity instance, transition instance, or all instances (activity or transition) for an activity
+//
 // Instructions are executed immediately and in the order they are provided in this request's body.
 // Variables can be provided with every starting instruction.
 func (p *ProcessInstance) Modify(id string, req ReqModifyProcessInstance) error {
@@ -530,10 +532,12 @@ func (p *ProcessInstance) Modify(id string, req ReqModifyProcessInstance) error 
 
 // ModifyAsync submits a list of modification instructions to change a process instance's execution state.
 // A modification instruction is one of the following:
-//    Starting execution before an activity
-//    Starting execution after an activity on its single outgoing sequence flow
-//    Starting execution on a specific sequence flow
-//    Cancelling an activity instance, transition instance, or all instances (activity or transition) for an activity
+//
+//	Starting execution before an activity
+//	Starting execution after an activity on its single outgoing sequence flow
+//	Starting execution on a specific sequence flow
+//	Cancelling an activity instance, transition instance, or all instances (activity or transition) for an activity
+//
 // Instructions are executed asynchronous and in the order they are provided in this request's body.
 // Variables can be provided with every starting instruction.
 func (p *ProcessInstance) ModifyAsync(id string, req ReqModifyProcessInstance) (batch *ResBatch, err error) {
