@@ -172,6 +172,10 @@ func (d *Deployment) Create(deploymentCreate ReqDeploymentCreate) (deployment *R
 			if fw, err = w.CreateFormFile(key, x.Name()); err != nil {
 				return nil, err
 			}
+		} else if _, ok := resource.(multipart.File); ok {
+			if fw, err = w.CreateFormFile(key, key); err != nil {
+				return nil, err
+			}
 		} else {
 			if fw, err = w.CreateFormField(key); err != nil {
 				return nil, err
