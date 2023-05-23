@@ -73,6 +73,12 @@ type Context struct {
 	client *camundaclientgo.Client
 }
 
+// QueryFetchAndLockTopicWithHandler for adding handlers
+type QueryFetchAndLockTopicWithHandler struct {
+	Handler                Handler
+	QueryFetchAndLockTopic *camundaclientgo.QueryFetchAndLockTopic
+}
+
 // Complete a mark external task is complete
 func (c *Context) Complete(query QueryComplete) error {
 	return c.client.ExternalTask.Complete(c.Task.Id, camundaclientgo.QueryComplete{
@@ -82,7 +88,7 @@ func (c *Context) Complete(query QueryComplete) error {
 	})
 }
 
-// Extend the lock for a new duration
+// ExtendLock is used to extend the lock by the given duration
 func (c *Context) ExtendLock(newDurationMS int) error {
 	return c.client.ExternalTask.ExtendLock(c.Task.Id, camundaclientgo.QueryExtendLock{
 		NewDuration: &newDurationMS,
@@ -145,6 +151,27 @@ func (p *Processor) AddHandler(topics []*camundaclientgo.QueryFetchAndLockTopic,
 	}, handler)
 }
 
+// AddHandlers registers multiple external task handlers and starts pulling for work. Calling this after a Shutdown has no effect.
+func (p *Processor) AddHandlers(topicHandlers []*QueryFetchAndLockTopicWithHandler) {
+	if topicHandlers != nil && p.options.LockDuration != 0 {
+		for _, v := range topicHandlers {
+			if v.QueryFetchAndLockTopic != nil && v.QueryFetchAndLockTopic.LockDuration <= 0 {
+				v.QueryFetchAndLockTopic.LockDuration = int(p.options.LockDuration / time.Millisecond)
+			}
+		}
+	}
+
+	var asyncResponseTimeout *int
+	if p.options.AsyncResponseTimeout != nil {
+		asyncResponseTimeout = p.options.AsyncResponseTimeout
+	} else if p.options.LongPollingTimeout.Nanoseconds() > 0 {
+		msValue := int(p.options.LongPollingTimeout.Nanoseconds() / int64(time.Millisecond))
+		asyncResponseTimeout = &msValue
+	}
+
+	p.startMultiHandlerPuller(topicHandlers, asyncResponseTimeout)
+}
+
 func (p *Processor) startPuller(query camundaclientgo.QueryFetchAndLock, handler Handler) {
 	var tasksChan = make(chan *camundaclientgo.ResLockedExternalTask)
 
@@ -180,6 +207,63 @@ func (p *Processor) startPuller(query camundaclientgo.QueryFetchAndLock, handler
 
 				for _, task := range tasks {
 					tasksChan <- task
+				}
+			}
+		}
+	}()
+}
+
+func (p *Processor) startMultiHandlerPuller(topicHandlers []*QueryFetchAndLockTopicWithHandler, asyncResponseTimeout *int) {
+	tasksChans := make(map[string]chan *camundaclientgo.ResLockedExternalTask)
+
+	maxParallelTaskPerHandler := p.options.MaxParallelTaskPerHandler
+	if maxParallelTaskPerHandler < 1 {
+		maxParallelTaskPerHandler = 1
+	}
+
+	// create channels for each of the topics and their worker pools
+	for _, t := range topicHandlers {
+		tasksChans[t.QueryFetchAndLockTopic.TopicName] = make(chan *camundaclientgo.ResLockedExternalTask)
+		// create worker pool
+		for i := 0; i < maxParallelTaskPerHandler; i++ {
+			p.workerGroup.Add(1)
+			go p.runWorker(t.Handler, tasksChans[t.QueryFetchAndLockTopic.TopicName])
+		}
+	}
+
+	go func() {
+		topics := make([]*camundaclientgo.QueryFetchAndLockTopic, len(topicHandlers))
+		for i, t := range topicHandlers {
+			topics[i] = t.QueryFetchAndLockTopic
+		}
+		retries := 0
+		for {
+			select {
+			case <-p.ctx.Done():
+				for _, tasksChan := range tasksChans {
+					close(tasksChan)
+				}
+				return
+			default:
+				tasks, err := p.client.ExternalTask.FetchAndLock(camundaclientgo.QueryFetchAndLock{
+					WorkerId:             p.options.WorkerId,
+					MaxTasks:             p.options.MaxTasks,
+					UsePriority:          p.options.UsePriority,
+					AsyncResponseTimeout: asyncResponseTimeout,
+					Topics:               topics,
+				})
+				if err != nil {
+					if retries < 60 {
+						retries += 1
+					}
+					p.logger(fmt.Errorf("failed pull: %w, sleeping: %d seconds", err, retries))
+					time.Sleep(time.Duration(retries) * time.Second)
+					continue
+				}
+				retries = 0
+
+				for _, task := range tasks {
+					tasksChans[task.TopicName] <- task
 				}
 			}
 		}
