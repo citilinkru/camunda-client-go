@@ -4,7 +4,6 @@ import (
 	"bytes"
 	"encoding/json"
 	"fmt"
-	"golang.org/x/oauth2"
 	"io"
 	"io/ioutil"
 	"net/http"
@@ -26,7 +25,7 @@ type ClientOptions struct {
 	Timeout     time.Duration
 	ApiUser     string
 	ApiPassword string
-	Token       *oauth2.Token
+	BearerToken string
 }
 
 // Client a client for Camunda API
@@ -36,7 +35,7 @@ type Client struct {
 	userAgent   string
 	apiUser     string
 	apiPassword string
-	Token       *oauth2.Token
+	bearerToken string
 
 	ExternalTask      *ExternalTask
 	Deployment        *Deployment
@@ -100,7 +99,7 @@ func NewClient(options ClientOptions) *Client {
 		userAgent:   DefaultUserAgent,
 		apiUser:     options.ApiUser,
 		apiPassword: options.ApiPassword,
-		Token:       options.Token,
+		bearerToken: options.BearerToken,
 	}
 
 	if options.EndpointUrl != "" {
@@ -125,6 +124,10 @@ func NewClient(options ClientOptions) *Client {
 	client.Tenant = &Tenant{client: client}
 
 	return client
+}
+
+func (c *Client) SetBearerToken(bearerToken string) {
+	c.bearerToken = bearerToken
 }
 
 // SetCustomTransport set new custom transport
@@ -184,8 +187,8 @@ func (c *Client) do(method, path string, query map[string]string, body io.Reader
 		req.Header.Set("Content-Type", contentType)
 	}
 
-	if c.Token != nil {
-		c.Token.SetAuthHeader(req)
+	if c.bearerToken != "" {
+		req.SetBearerToken(c.bearerToken)
 	} else {
 		req.SetBasicAuth(c.apiUser, c.apiPassword)
 	}
