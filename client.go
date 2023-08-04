@@ -20,20 +20,22 @@ const DefaultDateTimeFormat = "2006-01-02T15:04:05.000-0700"
 
 // ClientOptions a client options
 type ClientOptions struct {
-	UserAgent   string
-	EndpointUrl string
-	Timeout     time.Duration
-	ApiUser     string
-	ApiPassword string
+	UserAgent           string
+	EndpointUrl         string
+	Timeout             time.Duration
+	ApiUser             string
+	ApiPassword         string
+	AuthorizationHeader string
 }
 
 // Client a client for Camunda API
 type Client struct {
-	httpClient  *http.Client
-	endpointUrl string
-	userAgent   string
-	apiUser     string
-	apiPassword string
+	httpClient          *http.Client
+	endpointUrl         string
+	userAgent           string
+	apiUser             string
+	apiPassword         string
+	authorizationHeader string
 
 	ExternalTask      *ExternalTask
 	Deployment        *Deployment
@@ -93,10 +95,11 @@ func NewClient(options ClientOptions) *Client {
 		httpClient: &http.Client{
 			Timeout: time.Second * DefaultTimeoutSec,
 		},
-		endpointUrl: DefaultEndpointUrl,
-		userAgent:   DefaultUserAgent,
-		apiUser:     options.ApiUser,
-		apiPassword: options.ApiPassword,
+		endpointUrl:         DefaultEndpointUrl,
+		userAgent:           DefaultUserAgent,
+		apiUser:             options.ApiUser,
+		apiPassword:         options.ApiPassword,
+		authorizationHeader: options.AuthorizationHeader,
 	}
 
 	if options.EndpointUrl != "" {
@@ -121,6 +124,10 @@ func NewClient(options ClientOptions) *Client {
 	client.Tenant = &Tenant{client: client}
 
 	return client
+}
+
+func (c *Client) SetAuthorizationHeader(bearerToken string) {
+	c.authorizationHeader = bearerToken
 }
 
 // SetCustomTransport set new custom transport
@@ -180,7 +187,11 @@ func (c *Client) do(method, path string, query map[string]string, body io.Reader
 		req.Header.Set("Content-Type", contentType)
 	}
 
-	req.SetBasicAuth(c.apiUser, c.apiPassword)
+	if c.authorizationHeader != "" {
+		req.Header.Set("Authorization", c.authorizationHeader)
+	} else {
+		req.SetBasicAuth(c.apiUser, c.apiPassword)
+	}
 
 	res, err = c.httpClient.Do(req)
 	if err != nil {
