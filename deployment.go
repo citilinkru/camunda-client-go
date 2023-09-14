@@ -3,10 +3,10 @@ package camunda_client_go
 import (
 	"bytes"
 	"io"
+	"io/fs"
 	"io/ioutil"
 	"mime/multipart"
 	"net/http"
-	"os"
 	"strconv"
 )
 
@@ -168,8 +168,12 @@ func (d *Deployment) Create(deploymentCreate ReqDeploymentCreate) (deployment *R
 			defer x.Close()
 		}
 
-		if x, ok := resource.(*os.File); ok {
-			if fw, err = w.CreateFormFile(key, x.Name()); err != nil {
+		if x, ok := resource.(fs.File); ok {
+			stat, err := x.Stat()
+			if err != nil {
+				return nil, err
+			}
+			if fw, err = w.CreateFormFile(key, stat.Name()); err != nil {
 				return nil, err
 			}
 		} else if _, ok := resource.(multipart.File); ok {
