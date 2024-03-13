@@ -15,7 +15,7 @@ type ReqMessage struct {
 	// Used to correlate the message for a tenant with the given id.
 	// Will only correlate to executions and process definitions which belong to the tenant.
 	// Must not be supplied in conjunction with a withoutTenantId.
-	TenantId string `json:"tenantIdIn,omitempty"`
+	TenantId string `json:"tenantId,omitempty"`
 	// A Boolean value that indicates whether the message should only be correlated to executions and process definitions which belong to no tenant or not.
 	// Value may only be true, as false is the default behavior.
 	// Must not be supplied in conjunction with a tenantId.
